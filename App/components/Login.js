@@ -1,12 +1,27 @@
 var React = require('react-native');
 var {
-  View, Text, StyleSheet, TouchableHighlight, TextInput
+  View,
+  Text,
+  StyleSheet,
+  TouchableHighlight,
+  TextInput,
+  AsyncStorage
 } = React;
+
+var keys = require('../config/keys');
+var {
+  STORAGE_KEY_IS_LOGGED_IN,
+  STORAGE_KEY_EMAIL
+} = keys;
 
 var API = require('../apis/API');
 var Dashboard = require('./Dashboard');
 
 var styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#111111'
+  },
   mainContainer: {
     flex: 1,
     padding: 30,
@@ -65,6 +80,15 @@ class Login extends React.Component {
     });
   }
 
+  async _onSubmitEmail () {
+    try {
+      await AsyncStorage.setItem(STORAGE_KEY_IS_LOGGED_IN, 'true');
+      await AsyncStorage.setItem(STORAGE_KEY_EMAIL, this.state.email);
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
   onSubmitEmail () {
     if (!this.state.email) {
       return this.setState({
@@ -74,16 +98,15 @@ class Login extends React.Component {
 
     API.getDashboard(this.state.email)
     .then((dashboardProps) => {
-      console.log(dashboardProps);
-      this.props.navigator.push({
-        component: Dashboard,
-        title: 'Dashboard',
-        passProps: {dashboardProps}
+      // TODO handle the error case
+      this._onSubmitEmail();
+      this.setState({
+        dashboardProps
       });
     });
   }
 
-  render () {
+  renderLoginView () {
     return (
       <View style={styles.mainContainer}>
         <Text style={styles.title}>Hola! Ready to receive price drop alerts via notifications?</Text>
@@ -102,6 +125,24 @@ class Login extends React.Component {
         </TouchableHighlight>
       </View>
     );
+  }
+
+  render () {
+    // TODO this didn't work
+    if (this.state.dashboardProps) {
+      return (
+        <NavigatorIOS
+          style={styles.container}
+          initialRoute={{
+            component: Dashboard,
+            title: 'Cheapass',
+            passProps: {dashboardProps: this.state.dashboardProps}
+          }}
+        />
+      );
+    }
+
+    return this.renderLoginView();
   }
 }
 
