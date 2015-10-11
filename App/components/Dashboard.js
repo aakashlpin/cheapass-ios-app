@@ -6,7 +6,8 @@ var {
   PropTypes,
   StyleSheet,
   ListView,
-  Image
+  Image,
+  TouchableHighlight
 } = React;
 
 var styles = StyleSheet.create({
@@ -15,12 +16,6 @@ var styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'center'
     // marginTop: 70
-  },
-  email: {
-    textAlign: 'left',
-    fontSize: 12,
-    color: '#111',
-    marginTop: 60
   },
   sellerName: {
     paddingLeft: 10,
@@ -52,6 +47,25 @@ var styles = StyleSheet.create({
     bottom: 0,
     color: '#333',
     backgroundColor: 'rgba(0,0,0,0)'
+  },
+  email: {
+    // textAlign: 'left',
+    fontSize: 12,
+    color: '#111'
+  },
+  header: {
+    paddingTop: 10,
+    paddingBottom: 10,
+    marginTop: 60,
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    backgroundColor: '#eee'
+  },
+  logout: {
+    fontSize: 12,
+    color: 'red',
+    alignSelf: 'center'
   }
 });
 
@@ -63,11 +77,9 @@ class Dashboard extends React.Component {
 
   measureMainComponent () {
     this.refs.containerView.measure((ox, oy, width, height) => {
-      console.log(width, height);
       var itemMargin = 0;
       var availableSpace = width - ( itemMargin * 4 );
       var itemWidth = Math.floor(availableSpace / 2);
-      console.log(itemWidth);
 
       this.setState({
         rootViewWidth: width,
@@ -82,22 +94,30 @@ class Dashboard extends React.Component {
     setTimeout(this.measureMainComponent.bind(this));
   }
 
+  onPressLogout () {
+    console.log('onPressLogout');
+  }
+
   renderFooter () {
     var { email } = this.props.dashboardProps;
     return (
-      <Text style={styles.email}>Dashboard of {email}</Text>
+      <View style={styles.header}>
+        <Text style={styles.email}>Dashboard of {email}</Text>
+        <TouchableHighlight
+          onPress={this.onPressLogout.bind(this)}
+          underlayColor="#eee">
+          <Text style={styles.logout}>Logout</Text>
+        </TouchableHighlight>
+      </View>
     );
   }
 
   getGridItemStyles () {
     return {
-      // justifyContent: 'center',
-      // alignItems: 'center',
       borderWidth: 1,
       borderColor: '#eee',
       height: this.state.itemWidth,
       width: this.state.itemWidth,
-      // padding: this.state.itemMargin,
       backgroundColor: '#f0f'
     };
   }
@@ -141,6 +161,7 @@ class Dashboard extends React.Component {
   render () {
     return (
       <View style={styles.container} ref="containerView">
+        {this.renderFooter.call(this)}
         {this.renderResults.call(this)}
       </View>
     );
