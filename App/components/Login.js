@@ -84,6 +84,7 @@ class Login extends React.Component {
     try {
       await AsyncStorage.setItem(STORAGE_KEY_IS_LOGGED_IN, 'true');
       await AsyncStorage.setItem(STORAGE_KEY_EMAIL, this.state.email);
+      console.log('stored _onSubmitEmail');
     } catch (e) {
       console.log(e);
     }

@@ -1,11 +1,14 @@
 var React = require('react-native');
+// var ReactNativeBlur = require('react-native-blur');
+// var { BlurView, VibrancyView } = ReactNativeBlur;
 var _ = require('underscore');
 var {
   View,
   PropTypes,
   StyleSheet,
   ListView,
-  Image
+  Image,
+  Text
 } = React;
 
 var Header = require('./Header');
@@ -25,24 +28,11 @@ var styles = StyleSheet.create({
     flexWrap: 'wrap',
     justifyContent: 'center'
   },
-  trackOverlay: {
-    bottom: 0,
-    left: 0,
-    backgroundColor: 'rgba(0,0,0,0.1)'
-  },
-  trackProductName: {
-    fontSize: 12,
-    color: '#222',
-    left: 0,
-    bottom: 10,
-    backgroundColor: 'rgba(0,0,0,0)'
-  },
-  trackCurrentPrice: {
-    fontSize: 12,
-    left: 0,
-    bottom: 0,
-    color: '#333',
-    backgroundColor: 'rgba(0,0,0,0)'
+  trackOverlayText: {
+    color: '#ddd',
+    fontWeight: 'bold',
+    fontSize: 14,
+    padding: 10
   }
 });
 
@@ -77,24 +67,34 @@ class Dashboard extends React.Component {
       borderColor: '#eee',
       height: this.state.itemWidth,
       width: this.state.itemWidth,
-      backgroundColor: '#f0f'
+      backgroundColor: '#eee'
     };
   }
 
   getGridImageStyles () {
     return {
       height: this.state.itemWidth,
-      width: this.state.itemWidth
+      width: this.state.itemWidth,
+      flex: 1,
+      justifyContent: 'center',
+      backgroundColor: 'transparent'
     };
   }
 
   renderTrack (track) {
     return (
       <View style={this.getGridItemStyles.call(this)}>
-        <Image
-          style={this.getGridImageStyles.call(this)}
-          source={{uri: track.productImage}}
-          />
+        <View>
+          <Image
+            style={this.getGridImageStyles.call(this)}
+            source={{uri: track.productImage}}
+            >
+            <View style={{...this.getGridImageStyles.call(this), backgroundColor: 'rgba(0,0,0,0.65)'}}>
+              <Text style={styles.trackOverlayText}>{track.productName}</Text>
+              <Text style={styles.trackOverlayText}>Rs. {track.currentPrice}</Text>
+            </View>
+          </Image>
+        </View>
       </View>
     );
   }

@@ -13,6 +13,7 @@ var API = require('../apis/API');
 
 var Loader = require('./Loader');
 var Login = require('./Login');
+var Dashboard = require('./Dashboard');
 
 class App extends React.Component {
   constructor (props) {
@@ -31,14 +32,7 @@ class App extends React.Component {
     try {
       var isLoggedInValue = await AsyncStorage.getItem(STORAGE_KEY_IS_LOGGED_IN);
       var isLoggedIn = isLoggedInValue === null ? false : isLoggedInValue === 'false' ? false : true;
-      // this.setState({
-      //   isLoggedIn
-      // });
-
       if (!isLoggedIn) {
-        // this.setState({
-        //   isLoading: false
-        // });
         return this.props.toRoute({
           name: 'Login',
           component: Login
@@ -46,14 +40,22 @@ class App extends React.Component {
       }
 
       var storedEmail = await AsyncStorage.getItem(STORAGE_KEY_EMAIL);
-      API.getDashboard(storedEmail, this.props.toRoute);
+      API.getDashboard(storedEmail)
+      .then((response) => {
+        var dashboardProps = {
+          email: storedEmail,
+          results: response
+        };
+
+        this.props.toRoute({
+          name: 'Dashboard',
+          component: Dashboard,
+          data: {dashboardProps}
+        });
+      });
 
     } catch (e) {
-      console.log('error', e);
-      // this.setState({
-      //   isLoggedIn: false,
-      //   isLoading: false
-      // });
+      console.log('error _loadInitialState', e);
       this.props.toRoute({
         name: 'Login',
         component: Login
