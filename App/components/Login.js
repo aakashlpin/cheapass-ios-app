@@ -97,16 +97,22 @@ class Login extends React.Component {
     }
 
     API.getDashboard(this.state.email)
-    .then((dashboardProps) => {
-      // TODO handle the error case
+    .then((response) => {
       this._onSubmitEmail();
-      this.setState({
-        dashboardProps
+      var dashboardProps = {
+        email: this.state.email,
+        results: response
+      };
+
+      this.props.toRoute({
+        name: 'Dashboard',
+        component: Dashboard,
+        data: {dashboardProps}
       });
     });
   }
 
-  renderLoginView () {
+  render () {
     return (
       <View style={styles.mainContainer}>
         <Text style={styles.title}>Hola! Ready to receive price drop alerts via notifications?</Text>
@@ -125,24 +131,6 @@ class Login extends React.Component {
         </TouchableHighlight>
       </View>
     );
-  }
-
-  render () {
-    // TODO this didn't work
-    if (this.state.dashboardProps) {
-      return (
-        <NavigatorIOS
-          style={styles.container}
-          initialRoute={{
-            component: Dashboard,
-            title: 'Cheapass',
-            passProps: {dashboardProps: this.state.dashboardProps}
-          }}
-        />
-      );
-    }
-
-    return this.renderLoginView();
   }
 }
 

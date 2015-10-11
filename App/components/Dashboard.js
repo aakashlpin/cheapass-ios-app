@@ -2,19 +2,13 @@ var React = require('react-native');
 var _ = require('underscore');
 var {
   View,
-  Text,
   PropTypes,
   StyleSheet,
   ListView,
-  Image,
-  TouchableHighlight,
-  AsyncStorage
+  Image
 } = React;
 
-var keys = require('../config/keys');
-var {
-  STORAGE_KEY_IS_LOGGED_IN
-} = keys;
+var Header = require('./Header');
 
 var styles = StyleSheet.create({
   container: {
@@ -32,8 +26,6 @@ var styles = StyleSheet.create({
     justifyContent: 'center'
   },
   trackOverlay: {
-    // flex: 1,
-    // height: 100,
     bottom: 0,
     left: 0,
     backgroundColor: 'rgba(0,0,0,0.1)'
@@ -51,25 +43,6 @@ var styles = StyleSheet.create({
     bottom: 0,
     color: '#333',
     backgroundColor: 'rgba(0,0,0,0)'
-  },
-  email: {
-    // textAlign: 'left',
-    fontSize: 12,
-    color: '#111'
-  },
-  header: {
-    paddingTop: 10,
-    paddingBottom: 10,
-    marginTop: 60,
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    backgroundColor: '#eee'
-  },
-  logout: {
-    fontSize: 12,
-    color: 'red',
-    alignSelf: 'center'
   }
 });
 
@@ -96,32 +69,6 @@ class Dashboard extends React.Component {
 
   componentDidMount () {
     setTimeout(this.measureMainComponent.bind(this));
-  }
-
-  async _onLogout () {
-    try {
-      await AsyncStorage.setItem(STORAGE_KEY_IS_LOGGED_IN, 'false');
-    } catch (e) {
-      console.log(e);
-    }
-  }
-
-  onPressLogout () {
-    this._onLogout.call(this);
-  }
-
-  renderFooter () {
-    var { email } = this.props.dashboardProps;
-    return (
-      <View style={styles.header}>
-        <Text style={styles.email}>Dashboard of {email}</Text>
-        <TouchableHighlight
-          onPress={this.onPressLogout.bind(this)}
-          underlayColor="#eee">
-          <Text style={styles.logout}>Logout</Text>
-        </TouchableHighlight>
-      </View>
-    );
   }
 
   getGridItemStyles () {
@@ -153,7 +100,7 @@ class Dashboard extends React.Component {
   }
 
   renderResults () {
-    var { results } = this.props.dashboardProps;
+    var { results } = this.props.data.dashboardProps;
     var flattenedResults = _.flatten(results.reduce((clubbed, result) => {
       clubbed.push(result.tracks);
       return clubbed;
@@ -173,7 +120,7 @@ class Dashboard extends React.Component {
   render () {
     return (
       <View style={styles.container} ref="containerView">
-        {this.renderFooter.call(this)}
+        <Header {...this.props} email={this.props.data.dashboardProps.email} />
         {this.renderResults.call(this)}
       </View>
     );
@@ -181,7 +128,7 @@ class Dashboard extends React.Component {
 }
 
 Dashboard.propTypes = {
-  dashboardProps: PropTypes.object.isRequired
+  data: PropTypes.object.isRequired
 };
 
 module.exports = Dashboard;
