@@ -1,27 +1,20 @@
 var React = require('react-native');
+var _ = require('underscore');
 var {
   View,
   Text,
   PropTypes,
   StyleSheet,
   ListView,
-  ScrollView,
   Image
 } = React;
 
 var styles = StyleSheet.create({
   container: {
     flex: 1,
-    // backgroundColor: '#fff',
     flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-  wrapper: {
-    paddingTop: 10
-  },
-  flex: {
-    flex: 1
+    justifyContent: 'center'
+    // marginTop: 70
   },
   email: {
     textAlign: 'left',
@@ -29,57 +22,64 @@ var styles = StyleSheet.create({
     color: '#111',
     marginTop: 60
   },
-  listView: {
-    flex: 1
-    // backgroundColor: '#F2F5F8'
-  },
   sellerName: {
     paddingLeft: 10,
     marginBottom: 10
   },
-  trackContainer: {
+  gridList: {
     flex: 1,
-    // flexDirection: 'row',
-    // justifyContent: 'flex-start',
-    // alignItems: 'flex-start',
-    backgroundColor: '#fff',
-    paddingTop: 10,
-    paddingBottom: 10,
-    paddingLeft: 10,
-    paddingRight: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: '#eee'
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'center'
   },
-  trackLeftContainer: {
-    width: 100,
-    paddingRight: 20
-  },
-  trackRightContainer: {
-    flex: 1
-  },
-  trackThumbnail: {
-    paddingLeft: 10,
-    height: 60,
-    width: 53
+  trackOverlay: {
+    // flex: 1,
+    // height: 100,
+    bottom: 0,
+    left: 0,
+    backgroundColor: 'rgba(0,0,0,0.1)'
   },
   trackProductName: {
-    fontSize: 16,
+    fontSize: 12,
     color: '#222',
-    marginBottom: 10
+    left: 0,
+    bottom: 10,
+    backgroundColor: 'rgba(0,0,0,0)'
   },
   trackCurrentPrice: {
-    fontSize: 14,
-    color: '#333'
-  },
-  scrollView: {
-    height: 600,
-    backgroundColor: '#6A85B1'
+    fontSize: 12,
+    left: 0,
+    bottom: 0,
+    color: '#333',
+    backgroundColor: 'rgba(0,0,0,0)'
   }
 });
 
 class Dashboard extends React.Component {
   constructor (props) {
     super(props);
+    this.state = {};
+  }
+
+  measureMainComponent () {
+    this.refs.containerView.measure((ox, oy, width, height) => {
+      console.log(width, height);
+      var itemMargin = 0;
+      var availableSpace = width - ( itemMargin * 4 );
+      var itemWidth = Math.floor(availableSpace / 2);
+      console.log(itemWidth);
+
+      this.setState({
+        rootViewWidth: width,
+        rootViewHeight: height,
+        itemWidth,
+        itemMargin
+      });
+    });
+  }
+
+  componentDidMount () {
+    setTimeout(this.measureMainComponent.bind(this));
   }
 
   renderFooter () {
@@ -89,42 +89,32 @@ class Dashboard extends React.Component {
     );
   }
 
-  renderTrack (track) {
-    return (
-      <View style={styles.trackContainer}>
-        <View style={styles.trackLeftContainer}>
-          <Image
-            source={{uri: track.productImage}}
-            style={styles.trackThumbnail}
-            />
-        </View>
-        <View style={styles.trackRightContainer}>
-          <Text style={styles.trackProductName}>{track.productName}</Text>
-          <Text style={styles.trackCurrentPrice}>Rs. {track.currentPrice}</Text>
-        </View>
-      </View>
-    );
+  getGridItemStyles () {
+    return {
+      // justifyContent: 'center',
+      // alignItems: 'center',
+      borderWidth: 1,
+      borderColor: '#eee',
+      height: this.state.itemWidth,
+      width: this.state.itemWidth,
+      // padding: this.state.itemMargin,
+      backgroundColor: '#f0f'
+    };
   }
 
-  renderSellerView (sellerTracks) {
-    let seller = sellerTracks.seller;
-    let tracks = sellerTracks.tracks;
-    let ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
-    let dataSource = ds.cloneWithRows(tracks);
-    if (!tracks.length) {
-      return (
-        <View style={styles.flex}>
-        </View>
-      );
-    }
+  getGridImageStyles () {
+    return {
+      height: this.state.itemWidth,
+      width: this.state.itemWidth
+    };
+  }
 
+  renderTrack (track) {
     return (
-      <View style={styles.flex}>
-        <ListView
-          renderHeader={() => <Text style={styles.sellerName}>{seller.toUpperCase()}</Text>}
-          dataSource={dataSource}
-          renderRow={this.renderTrack.bind(this)}
-          style={styles.listView}
+      <View style={this.getGridItemStyles.call(this)}>
+        <Image
+          style={this.getGridImageStyles.call(this)}
+          source={{uri: track.productImage}}
           />
       </View>
     );
@@ -132,26 +122,27 @@ class Dashboard extends React.Component {
 
   renderResults () {
     var { results } = this.props.dashboardProps;
+    var flattenedResults = _.flatten(results.reduce((clubbed, result) => {
+      clubbed.push(result.tracks);
+      return clubbed;
+    }, []));
+
     var ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
-    var listViewDataSource = ds.cloneWithRows(results);
+    var listViewDataSource = ds.cloneWithRows(flattenedResults);
     return (
       <ListView
+        contentContainerStyle={styles.gridList}
         dataSource={listViewDataSource}
-        renderRow={this.renderSellerView.bind(this)}
-        style={styles.listView}
+        renderRow={this.renderTrack.bind(this)}
         />
     );
   }
+
   render () {
     return (
-      <ScrollView style={styles.scrollView}>
-        <View style={styles.container}>
-          <View style={styles.wrapper}>
-            {this.renderResults.call(this)}
-            {this.renderFooter.call(this)}
-          </View>
-        </View>
-    </ScrollView>
+      <View style={styles.container} ref="containerView">
+        {this.renderResults.call(this)}
+      </View>
     );
   }
 }
