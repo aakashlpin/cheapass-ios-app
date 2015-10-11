@@ -48,7 +48,7 @@ var App = React.createClass({
   async _loadInitialState() {
     try {
       var isLoggedInValue = await AsyncStorage.getItem(STORAGE_KEY_IS_LOGGED_IN);
-      var isLoggedIn = isLoggedInValue === null ? false : isLoggedInValue;
+      var isLoggedIn = isLoggedInValue === null ? false : isLoggedInValue === 'false' ? false : true;
       this.setState({
         isLoggedIn
       });

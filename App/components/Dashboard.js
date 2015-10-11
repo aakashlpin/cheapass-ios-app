@@ -7,22 +7,26 @@ var {
   StyleSheet,
   ListView,
   Image,
-  TouchableHighlight
+  TouchableHighlight,
+  AsyncStorage
 } = React;
+
+var keys = require('../config/keys');
+var {
+  STORAGE_KEY_IS_LOGGED_IN
+} = keys;
 
 var styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'column',
     justifyContent: 'center'
-    // marginTop: 70
   },
   sellerName: {
     paddingLeft: 10,
     marginBottom: 10
   },
   gridList: {
-    flex: 1,
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'center'
@@ -94,8 +98,16 @@ class Dashboard extends React.Component {
     setTimeout(this.measureMainComponent.bind(this));
   }
 
+  async _onLogout () {
+    try {
+      await AsyncStorage.setItem(STORAGE_KEY_IS_LOGGED_IN, 'false');
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
   onPressLogout () {
-    console.log('onPressLogout');
+    this._onLogout.call(this);
   }
 
   renderFooter () {
