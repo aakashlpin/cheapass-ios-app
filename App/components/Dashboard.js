@@ -8,8 +8,16 @@ var {
   StyleSheet,
   ListView,
   Image,
-  Text
+  Text,
+  AlertIOS,
+  AsyncStorage
 } = React;
+
+var keys = require('../config/keys');
+var { STORAGE_KEY_IS_INSTALLED } = keys;
+
+var PushManager = require('./RemotePushIOS');
+var API = require('../apis/API');
 
 var Header = require('./Header');
 
@@ -57,8 +65,55 @@ class Dashboard extends React.Component {
     });
   }
 
+  receiveRemoteNotification (notification) {
+    AlertIOS.alert(
+      'Cheapass Price Drop Alert',
+      notification.aps.alert,
+      [{
+        text: 'Buy Now',
+        onPress: () => console.log('Buy Now Pressed')
+      }, {
+        text: 'Ok',
+        onPress: () => console.log('Ok Pressed')
+      }]
+    );
+  }
+
+  async _handleAppInstallation () {
+    PushManager.setListenerForNotifications(this.receiveRemoteNotification);
+
+    var isAppInstalled = await AsyncStorage.getItem(STORAGE_KEY_IS_INSTALLED);
+    if (isAppInstalled === 'true') {
+      return;
+    }
+
+    PushManager.requestPermissions((err, data) => {
+      if (err) {
+        console.log('Could not register for push');
+      } else {
+        API.requestAppInstallation({
+          email: this.props.data.dashboardProps.email,
+          parsePayload: {
+            'deviceType': 'ios',
+            'deviceToken': data.token,
+            'channels': ['global']
+          }
+        })
+        .then((response) => {
+          if (response.status === 'ok') {
+            AsyncStorage.setItem(STORAGE_KEY_IS_INSTALLED, 'true');
+          }
+        })
+        .catch(e => {
+          console.log('exception caught in _handleAppInstallation ', e);
+        });
+      }
+    });
+  }
+
   componentDidMount () {
     setTimeout(this.measureMainComponent.bind(this));
+    this._handleAppInstallation();
   }
 
   getGridItemStyles () {
