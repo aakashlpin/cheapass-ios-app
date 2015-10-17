@@ -1,8 +1,6 @@
 var React = require('react-native');
 var {
-  AsyncStorage,
-  // PushNotificationIOS,
-  AlertIOS
+  AsyncStorage
 } = React;
 
 var keys = require('../config/keys');
@@ -16,8 +14,6 @@ var API = require('../apis/API');
 var Loader = require('./Loader');
 var Login = require('./Login');
 var Dashboard = require('./Dashboard');
-var PushManager = require('./RemotePushIOS');
-var registerInstallation = require('./Installation');
 
 class App extends React.Component {
   constructor (props) {
@@ -28,34 +24,7 @@ class App extends React.Component {
     };
   }
 
-  receiveRemoteNotification (notification) {
-    AlertIOS.alert(
-      'Cheapass Price Drop Alert',
-      notification.aps.alert,
-      [{
-        text: 'Buy Now',
-        onPress: () => console.log('Buy Now Pressed')
-      }, {
-        text: 'Ok',
-        onPress: () => console.log('Ok Pressed')
-      }]
-    );
-  }
-
   componentDidMount () {
-    PushManager.requestPermissions(function(err, data) {
-      if (err) {
-        console.log('Could not register for push');
-      } else {
-        registerInstallation({
-          'deviceType': 'ios',
-          'deviceToken': data.token,
-          'channels': ['global']
-        });
-       }
-    });
-
-    PushManager.setListenerForNotifications(this.receiveRemoteNotification);
     this._loadInitialState().done();
   }
 
