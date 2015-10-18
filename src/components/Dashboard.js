@@ -1,7 +1,4 @@
-var React = require('react-native');
-// var ReactNativeBlur = require('react-native-blur');
-// var { BlurView, VibrancyView } = ReactNativeBlur;
-var _ = require('underscore');
+import React from 'react-native';
 var {
   View,
   PropTypes,
@@ -10,41 +7,12 @@ var {
   Image,
   Text,
   AlertIOS,
-  AsyncStorage
+  LinkingIOS
 } = React;
 
-var keys = require('../config/keys');
-var { STORAGE_KEY_IS_INSTALLED } = keys;
-
 var PushManager = require('./RemotePushIOS');
-var API = require('../apis/API');
 
-var Header = require('./Header');
-
-var styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    flexDirection: 'column',
-    justifyContent: 'center'
-  },
-  sellerName: {
-    paddingLeft: 10,
-    marginBottom: 10
-  },
-  gridList: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'center'
-  },
-  trackOverlayText: {
-    color: '#ddd',
-    fontWeight: 'bold',
-    fontSize: 14,
-    padding: 10
-  }
-});
-
-class Dashboard extends React.Component {
+export default class Dashboard extends React.Component {
   constructor (props) {
     super(props);
     this.state = {};
@@ -66,54 +34,24 @@ class Dashboard extends React.Component {
   }
 
   receiveRemoteNotification (notification) {
+    const { productURL } = notification;
     AlertIOS.alert(
       'Cheapass Price Drop Alert',
       notification.aps.alert,
       [{
-        text: 'Buy Now',
-        onPress: () => console.log('Buy Now Pressed')
-      }, {
         text: 'Ok',
         onPress: () => console.log('Ok Pressed')
+      }, {
+        text: 'Buy Now',
+        onPress: () => LinkingIOS.openURL(productURL)
       }]
     );
   }
 
-  async _handleAppInstallation () {
+  componentDidMount () {
     PushManager.setListenerForNotifications(this.receiveRemoteNotification);
 
-    var isAppInstalled = await AsyncStorage.getItem(STORAGE_KEY_IS_INSTALLED);
-    if (isAppInstalled === 'true') {
-      return;
-    }
-
-    PushManager.requestPermissions((err, data) => {
-      if (err) {
-        console.log('Could not register for push');
-      } else {
-        API.requestAppInstallation({
-          email: this.props.data.dashboardProps.email,
-          parsePayload: {
-            'deviceType': 'ios',
-            'deviceToken': data.token,
-            'channels': ['global']
-          }
-        })
-        .then((response) => {
-          if (response.status === 'ok') {
-            AsyncStorage.setItem(STORAGE_KEY_IS_INSTALLED, 'true');
-          }
-        })
-        .catch(e => {
-          console.log('exception caught in _handleAppInstallation ', e);
-        });
-      }
-    });
-  }
-
-  componentDidMount () {
     setTimeout(this.measureMainComponent.bind(this));
-    this._handleAppInstallation();
   }
 
   getGridItemStyles () {
@@ -156,13 +94,8 @@ class Dashboard extends React.Component {
 
   renderResults () {
     var { results } = this.props.data.dashboardProps;
-    var flattenedResults = _.flatten(results.reduce((clubbed, result) => {
-      clubbed.push(result.tracks);
-      return clubbed;
-    }, []));
-
     var ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
-    var listViewDataSource = ds.cloneWithRows(flattenedResults);
+    var listViewDataSource = ds.cloneWithRows(results);
     return (
       <ListView
         contentContainerStyle={styles.gridList}
@@ -175,7 +108,7 @@ class Dashboard extends React.Component {
   render () {
     return (
       <View style={styles.container} ref="containerView">
-        <Header {...this.props} email={this.props.data.dashboardProps.email} />
+        {this.props.children}
         {this.renderResults.call(this)}
       </View>
     );
@@ -186,4 +119,26 @@ Dashboard.propTypes = {
   data: PropTypes.object.isRequired
 };
 
-module.exports = Dashboard;
+var styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'center'
+    // paddingTop: 64
+  },
+  sellerName: {
+    paddingLeft: 10,
+    marginBottom: 10
+  },
+  gridList: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'center'
+  },
+  trackOverlayText: {
+    color: '#ddd',
+    fontWeight: 'bold',
+    fontSize: 14,
+    padding: 10
+  }
+});

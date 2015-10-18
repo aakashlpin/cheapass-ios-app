@@ -15,6 +15,7 @@
     "no-unused-vars": 1,
     "no-undef": 2,
     "no-alert": 0,
+    "no-use-before-define": 0,
     "handle-callback-err": 0,
     "no-underscore-dangle": 0,
     "react/jsx-uses-react": 2,
