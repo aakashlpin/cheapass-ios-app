@@ -1,10 +1,13 @@
 import React from 'react-native';
 var {
   ScrollView,
+  View,
   Text,
   StyleSheet,
   TouchableHighlight,
-  TextInput
+  TextInput,
+  Dimensions,
+  StatusBarIOS
 } = React;
 
 export default class Login extends React.Component {
@@ -15,10 +18,11 @@ export default class Login extends React.Component {
     };
   }
   onFocus () {
+    const { height } = Dimensions.get('window');
     this.setState({
       contentOffset: {
         x: 0,
-        y: 150
+        y: (height * 1 / 3) + 50
       }
     });
   }
@@ -29,34 +33,43 @@ export default class Login extends React.Component {
     });
   }
 
+  componentDidMount () {
+    StatusBarIOS.setHidden(true);
+  }
+
   render () {
     const {email, isSubmitting} = this.props;
     return (
-      <ScrollView contentContainerStyle={styles.mainContainer} contentOffset={this.state.contentOffset}>
-        <Text style={styles.title}>Log In</Text>
+      <View style={styles.mainContainer}>
+        <Text style={styles.title}>Cheapass</Text>
+        <ScrollView contentContainerStyle={{flex: 1}} contentOffset={this.state.contentOffset}>
+          <View style={styles.formContainer}>
+            <TextInput
+              style={styles.emailInput}
+              value={email}
+              placeholder="Enter Email Id"
+              placeholderTextColor="#69CBF8"
+              editable={!isSubmitting}
+              autoCapitalize="none"
+              autoCorrect={false}
+              keyboardType={'email-address'}
+              enablesReturnKeyAutomatically={true}
+              onFocus={() => this.onFocus()}
+              onBlur={() => this.onBlur()}
+              onSubmitEditing={() => this.props.onSubmitEmail()}
+              onChangeText={(text) => this.props.onChangeEmail({email: text})}
+            />
 
-        <Text>Email Id</Text>
-        <TextInput
-          style={styles.emailInput}
-          value={email}
-          editable={!isSubmitting}
-          autoCapitalize="none"
-          autoFocus={true}
-          autoCorrect={false}
-          keyboardType={'email-address'}
-          enablesReturnKeyAutomatically={true}
-          onFocus={() => this.onFocus()}
-          onBlur={() => this.onBlur()}
-          onSubmitEditing={() => this.props.onSubmitEmail()}
-          onChangeText={(text) => this.props.onChangeEmail({email: text})}
-        />
-
-        <TouchableHighlight
-          style={styles.button}
-          onPress={this.props.onSubmitEmail.bind(this)}>
-            <Text style={styles.buttonText}>Goto Dashboard</Text>
-        </TouchableHighlight>
-      </ScrollView>
+            <View style={styles.submitContainer}>
+              <TouchableHighlight
+                style={styles.button}
+                onPress={this.props.onSubmitEmail.bind(this)}>
+                  <Text style={styles.buttonText}>Login</Text>
+              </TouchableHighlight>
+            </View>
+          </View>
+        </ScrollView>
+      </View>
     );
   }
 }
@@ -69,17 +82,21 @@ Login.propTypes = {
 };
 
 var styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#111111'
-  },
   mainContainer: {
     flex: 1,
-    padding: 30,
-    // marginTop: 65,
+    paddingTop: 48,
     flexDirection: 'column',
-    justifyContent: 'center',
-    backgroundColor: '#48BBEC'
+    backgroundColor: '#0B315B'
+  },
+  submitContainer: {
+    marginLeft: 32,
+    marginRight: 32
+  },
+  formContainer: {
+    position: 'absolute',
+    bottom: 36,
+    left: 0,
+    right: 0
   },
   title: {
     marginBottom: 20,
@@ -88,30 +105,30 @@ var styles = StyleSheet.create({
     color: '#fff'
   },
   emailInput: {
-    height: 50,
-    padding: 4,
-    marginRight: 5,
-    fontSize: 16,
-    borderWidth: 1,
-    borderColor: 'white',
-    borderRadius: 8,
-    color: 'white'
+    height: 48,
+    paddingTop: 10,
+    paddingBottom: 10,
+    paddingLeft: 32,
+    paddingRight: 32,
+    marginBottom: 16,
+    fontSize: 18,
+    color: 'white',
+    backgroundColor: '#24456B'
   },
   buttonText: {
+    alignSelf: 'center',
+    color: '#0E325A',
     fontSize: 18,
-    color: '#111',
-    alignSelf: 'center'
+    fontWeight: '500'
   },
   button: {
-    height: 45,
+    height: 48,
     flexDirection: 'row',
     backgroundColor: 'white',
-    borderColor: 'white',
-    borderWidth: 1,
-    borderRadius: 8,
     marginBottom: 10,
     marginTop: 10,
     alignSelf: 'stretch',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    borderRadius: 4
   }
 });
