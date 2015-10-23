@@ -1,12 +1,11 @@
 import React from 'react-native';
-import {Icon, } from 'react-native-icons';
+import { Icon } from 'react-native-icons';
 
 var {
   ScrollView,
   View,
   Text,
   StyleSheet,
-  TouchableHighlight,
   TextInput,
   Dimensions,
   StatusBarIOS
