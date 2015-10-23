@@ -1,4 +1,6 @@
 import React from 'react-native';
+import {Icon, } from 'react-native-icons';
+
 var {
   ScrollView,
   View,
@@ -44,28 +46,34 @@ export default class Login extends React.Component {
         <Text style={styles.title}>Cheapass</Text>
         <ScrollView contentContainerStyle={{flex: 1}} contentOffset={this.state.contentOffset}>
           <View style={styles.formContainer}>
-            <TextInput
-              style={styles.emailInput}
-              value={email}
-              placeholder="Enter Email Id"
-              placeholderTextColor="#69CBF8"
-              editable={!isSubmitting}
-              autoCapitalize="none"
-              autoCorrect={false}
-              keyboardType={'email-address'}
-              enablesReturnKeyAutomatically={true}
-              onFocus={() => this.onFocus()}
-              onBlur={() => this.onBlur()}
-              onSubmitEditing={() => this.props.onSubmitEmail()}
-              onChangeText={(text) => this.props.onChangeEmail({email: text})}
-            />
-
-            <View style={styles.submitContainer}>
-              <TouchableHighlight
-                style={styles.button}
-                onPress={this.props.onSubmitEmail.bind(this)}>
-                  <Text style={styles.buttonText}>Login</Text>
-              </TouchableHighlight>
+            <View style={styles.emailInputBar}>
+              <Icon
+                name='ion|ios-email'
+                size={40}
+                color='#5FC9FC'
+                style={styles.iconEmail}
+              />
+              <TextInput
+                style={styles.emailInput}
+                value={email}
+                placeholder="Enter Email ID to Login"
+                placeholderTextColor="#69CBF8"
+                editable={!isSubmitting}
+                autoCapitalize="none"
+                autoCorrect={false}
+                keyboardType={'email-address'}
+                enablesReturnKeyAutomatically={true}
+                onFocus={() => this.onFocus()}
+                onBlur={() => this.onBlur()}
+                onSubmitEditing={() => this.props.onSubmitEmail()}
+                onChangeText={(text) => this.props.onChangeEmail({email: text})}
+              />
+              <Icon
+                name="ion|ios-arrow-thin-right"
+                size={40}
+                color='#5FC9FC'
+                style={styles.iconRightArrow}
+              />
             </View>
           </View>
         </ScrollView>
@@ -88,47 +96,40 @@ var styles = StyleSheet.create({
     flexDirection: 'column',
     backgroundColor: '#0B315B'
   },
-  submitContainer: {
-    marginLeft: 32,
-    marginRight: 32
-  },
-  formContainer: {
-    position: 'absolute',
-    bottom: 36,
-    left: 0,
-    right: 0
-  },
   title: {
     marginBottom: 20,
     fontSize: 25,
     textAlign: 'center',
     color: '#fff'
   },
-  emailInput: {
-    height: 48,
-    paddingTop: 10,
-    paddingBottom: 10,
-    paddingLeft: 32,
-    paddingRight: 32,
+  formContainer: {
+    position: 'absolute',
+    bottom: 80,
+    left: 0,
+    right: 0
+  },
+  emailInputBar: {
+    flexDirection: 'row',
+    flexWrap: 'nowrap',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    height: 60,
+    padding: 10,
     marginBottom: 16,
-    fontSize: 18,
-    color: 'white',
     backgroundColor: '#24456B'
   },
-  buttonText: {
-    alignSelf: 'center',
-    color: '#0E325A',
-    fontSize: 18,
-    fontWeight: '500'
+  iconEmail: {
+    height: 18,
+    width: 25
   },
-  button: {
-    height: 48,
-    flexDirection: 'row',
-    backgroundColor: 'white',
-    marginBottom: 10,
-    marginTop: 10,
-    alignSelf: 'stretch',
-    justifyContent: 'center',
-    borderRadius: 4
+  iconRightArrow: {
+    height: 18,
+    width: 26
+  },
+  emailInput: {
+    fontSize: 18,
+    color: 'white',
+    paddingLeft: 10,
+    flex: 1
   }
 });
