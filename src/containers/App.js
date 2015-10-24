@@ -80,16 +80,11 @@ class App extends React.Component {
             />;
     }
 
-    return <Dashboard
-      data={{dashboardProps: {
-        results: tracks,
-        email: email
-      }}}>
-      <Header
-        email={email}
-        onPressLogout={this.onLogout.bind(this)}
-        />
-    </Dashboard>;
+    return (
+      <Dashboard data={{dashboardProps: { results: tracks, email: email }}}>
+        <Header email={email} onPressLogout={this.onLogout.bind(this)} />
+      </Dashboard>
+    );
   }
 }
 

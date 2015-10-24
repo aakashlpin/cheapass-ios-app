@@ -74,20 +74,11 @@ export default class Dashboard extends React.Component {
     };
   }
 
-  renderTrack (track) {
+  render () {
     return (
-      <View style={this.getGridItemStyles.call(this)}>
-        <View>
-          <Image
-            style={this.getGridImageStyles.call(this)}
-            source={{uri: track.productImage}}
-            >
-            <View style={{...this.getGridImageStyles.call(this), backgroundColor: 'rgba(0,0,0,0.65)'}}>
-              <Text style={styles.trackOverlayText}>{track.productName}</Text>
-              <Text style={styles.trackOverlayText}>Rs. {track.currentPrice}</Text>
-            </View>
-          </Image>
-        </View>
+      <View style={styles.container} ref="containerView">
+        {this.props.children}
+        {this.renderResults.call(this)}
       </View>
     );
   }
@@ -98,18 +89,38 @@ export default class Dashboard extends React.Component {
     var listViewDataSource = ds.cloneWithRows(results);
     return (
       <ListView
-        contentContainerStyle={styles.gridList}
+        // contentContainerStyle={styles.gridList}
         dataSource={listViewDataSource}
+        renderSectionHeader={this.renderHeader.bind(this)}
         renderRow={this.renderTrack.bind(this)}
         />
     );
   }
 
-  render () {
+  renderTrack (track) {
     return (
-      <View style={styles.container} ref="containerView">
-        {this.props.children}
-        {this.renderResults.call(this)}
+      <View style={styles.listItemContainer}>
+        <View style={styles.listItemContainerLeftChild}>
+          <Image style={styles.listItemLeftImage} source={{uri: track.productImage}} />
+        </View>
+        <View style={styles.listItemContainerRightChild}>
+          <View style={styles.listItemProductNameContainer}>
+            <Text style={{}}>{track.productName}</Text>
+          </View>
+          <View style={styles.listItemProductDetailsContainer}>
+            <Text style={{}}>Rs. {track.currentPrice}</Text>
+            <Text style={{}}>{track.seller}</Text>
+          </View>
+        </View>
+      </View>
+    );
+  }
+
+  renderHeader () {
+    return (
+      <View style={styles.tracksHeader}>
+        <Text style={styles.tracksHeaderText}>Product Details</Text>
+        <Text style={styles.tracksHeaderText}>Current Price</Text>
       </View>
     );
   }
@@ -124,21 +135,50 @@ var styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     justifyContent: 'center'
-    // paddingTop: 64
   },
-  sellerName: {
-    paddingLeft: 10,
-    marginBottom: 10
-  },
-  gridList: {
+  tracksHeader: {
+    justifyContent: 'space-between',
     flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'center'
+    flexWrap: 'nowrap',
+    alignItems: 'center',
+    padding: 10,
+    backgroundColor: '#F1F3F5'
   },
-  trackOverlayText: {
-    color: '#ddd',
-    fontWeight: 'bold',
-    fontSize: 14,
-    padding: 10
+  tracksHeaderText: {
+    color: '#0E325A',
+    opacity: 0.3,
+    fontWeight: '500'
+  },
+  listItemContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    flexWrap: 'nowrap'
+  },
+  listItemContainerLeftChild: {
+    // backgroundColor: 'green',
+    // alignItems: 'flex-start',
+    padding: 12
+  },
+  listItemLeftImage: {
+    height: 60,
+    width: 60
+  },
+  listItemContainerRightChild: {
+    // backgroundColor: 'red',
+    height: 100,
+    flex: 1,
+    justifyContent: 'space-between',
+    flexDirection: 'row',
+    alignItems: 'center',
+    flexWrap: 'nowrap',
+    padding: 12,
+    paddingLeft: 0,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ccc'
+  },
+  listItemProductNameContainer: {
+    width: 150
   }
 });
