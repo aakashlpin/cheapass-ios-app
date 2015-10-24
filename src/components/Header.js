@@ -4,7 +4,8 @@ var {
   Text,
   TouchableHighlight,
   StyleSheet,
-  PropTypes
+  PropTypes,
+  StatusBarIOS
 } = React;
 
 export default class Header extends React.Component {
@@ -12,19 +13,21 @@ export default class Header extends React.Component {
     super();
   }
 
+  componentDidMount () {
+    StatusBarIOS.setHidden(false, 'slide');
+    StatusBarIOS.setStyle('light-content', true);
+  }
+
   render () {
-    var { email } = this.props;
     return (
       <View style={styles.navbarContainer}>
         <View style={styles.header}>
-          <Text style={styles.email}>Dashboard of {email}</Text>
-          <TouchableHighlight
-            onPress={() => this.props.onPressLogout()}
-            underlayColor="#eee">
-            <Text style={styles.logout}>Logout</Text>
+          <Text style={styles.navbarTitle}>Cheapass</Text>
+          <Text>&nbsp;</Text>
+          <TouchableHighlight onPress={() => this.props.onPressLogout()} underlayColor="#eee">
+            <Text style={styles.navbarRightButton}>Logout</Text>
           </TouchableHighlight>
         </View>
-
       </View>
     );
   }
@@ -36,31 +39,37 @@ Header.propTypes = {
 };
 
 var styles = StyleSheet.create({
-  email: {
-    fontSize: 12,
-    color: '#111'
-  },
   header: {
     paddingTop: 32,
     paddingBottom: 10,
     flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'center'
-    // backgroundColor: '#eee'
-    // position: 'absolute',
-    // top: 30
+    flexWrap: 'nowrap',
+    justifyContent: 'space-between'
   },
-  logout: {
-    fontSize: 12,
-    color: 'red',
-    alignSelf: 'center'
+  navbarTitle: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: '#fff',
+    textAlign: 'center',
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    bottom: 12,
+    height: 64
+  },
+  navbarRightButton: {
+    fontSize: 16,
+    color: '#69CBF8',
+    fontWeight: '500',
+    paddingRight: 10,
+    height: 64,
+    textAlign: 'center'
   },
   navbarContainer: {
-    // position: 'absolute',
     top: 0,
     left: 0,
     right: 0,
     height: 64,
-    backgroundColor: '#5589B7'
+    backgroundColor: '#204A7B'
   }
 });
