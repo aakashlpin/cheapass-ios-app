@@ -1,4 +1,6 @@
 import React from 'react-native';
+import Swipeout from 'react-native-swipeout';
+import { Icon } from 'react-native-icons';
 var {
   View,
   PropTypes,
@@ -15,7 +17,9 @@ var PushManager = require('./RemotePushIOS');
 export default class Dashboard extends React.Component {
   constructor (props) {
     super(props);
-    this.state = {};
+    this.state = {
+      scrollEnabled: true
+    };
   }
 
   measureMainComponent () {
@@ -51,27 +55,7 @@ export default class Dashboard extends React.Component {
   componentDidMount () {
     PushManager.setListenerForNotifications(this.receiveRemoteNotification);
 
-    setTimeout(this.measureMainComponent.bind(this));
-  }
-
-  getGridItemStyles () {
-    return {
-      borderWidth: 1,
-      borderColor: '#eee',
-      height: this.state.itemWidth,
-      width: this.state.itemWidth,
-      backgroundColor: '#eee'
-    };
-  }
-
-  getGridImageStyles () {
-    return {
-      height: this.state.itemWidth,
-      width: this.state.itemWidth,
-      flex: 1,
-      justifyContent: 'center',
-      backgroundColor: 'transparent'
-    };
+    // setTimeout(this.measureMainComponent.bind(this));
   }
 
   render () {
@@ -89,7 +73,7 @@ export default class Dashboard extends React.Component {
     var listViewDataSource = ds.cloneWithRows(results);
     return (
       <ListView
-        // contentContainerStyle={styles.gridList}
+        scrollEnabled={this.state.scrollEnabled}
         dataSource={listViewDataSource}
         renderSectionHeader={this.renderHeader.bind(this)}
         renderRow={this.renderTrack.bind(this)}
@@ -98,21 +82,43 @@ export default class Dashboard extends React.Component {
   }
 
   renderTrack (track) {
+    const swipeoutButtons = [
+      {
+        component: <Icon
+          name='ion|ios-cart-outline'
+          size={60}
+          color='#fff'
+          style={styles.iconCart}
+        />,
+        type: 'primary',
+        backgroundColor: '#204A7B',
+        onPress: () => {
+          LinkingIOS.openURL(track.productURL);
+        }
+      }
+    ];
+
     return (
-      <View style={styles.listItemContainer}>
-        <View style={styles.listItemContainerLeftChild}>
-          <Image style={styles.listItemLeftImage} source={{uri: track.productImage}} />
-        </View>
-        <View style={styles.listItemContainerRightChild}>
-          <View style={styles.listItemProductNameContainer}>
-            <Text style={{}}>{track.productName}</Text>
+      <Swipeout
+        right={swipeoutButtons}
+        backgroundColor="#fff"
+        autoClose={true}
+        >
+        <View style={styles.listItemContainer}>
+          <View style={styles.listItemContainerLeftChild}>
+            <Image style={styles.listItemLeftImage} source={{uri: track.productImage}} />
           </View>
-          <View style={styles.listItemProductDetailsContainer}>
-            <Text style={{}}>Rs. {track.currentPrice}</Text>
-            <Text style={{}}>{track.seller}</Text>
+          <View style={styles.listItemContainerRightChild}>
+            <View style={styles.listItemProductNameContainer}>
+              <Text style={{}}>{track.productName}</Text>
+            </View>
+            <View style={styles.listItemProductDetailsContainer}>
+              <Text style={{}}>Rs. {track.currentPrice}/-</Text>
+              <Text style={{}}>{track.seller}</Text>
+            </View>
           </View>
         </View>
-      </View>
+      </Swipeout>
     );
   }
 
@@ -157,8 +163,6 @@ var styles = StyleSheet.create({
     flexWrap: 'nowrap'
   },
   listItemContainerLeftChild: {
-    // backgroundColor: 'green',
-    // alignItems: 'flex-start',
     padding: 12
   },
   listItemLeftImage: {
@@ -166,7 +170,6 @@ var styles = StyleSheet.create({
     width: 60
   },
   listItemContainerRightChild: {
-    // backgroundColor: 'red',
     height: 100,
     flex: 1,
     justifyContent: 'space-between',
@@ -180,5 +183,10 @@ var styles = StyleSheet.create({
   },
   listItemProductNameContainer: {
     width: 150
+  },
+  iconCart: {
+    height: 60,
+    width: 60,
+    flex: 1
   }
 });
