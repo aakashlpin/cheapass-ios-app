@@ -13,6 +13,15 @@ export const HANDLE_RESEND_OTP = 'HANDLE_RESEND_OTP';
 export const HANDLE_RESEND_OTP_SUCCESS = 'HANDLE_RESEND_OTP_SUCCESS';
 export const HANDLE_RESEND_OTP_FAILURE = 'HANDLE_RESEND_OTP_FAILURE';
 export const HANDLE_RELOAD_ALERTS = 'HANDLE_RELOAD_ALERTS';
+export const HANDLE_EDIT_EMAIL = 'HANDLE_EDIT_EMAIL';
+
+import LGTM from 'lgtm';
+const emailValidator =
+  LGTM.validator()
+  .validates('email')
+    .required('Enter your registered Email ID')
+    .email('Enter a valid Email ID')
+  .build();
 
 import {
   AsyncStorage
@@ -115,21 +124,31 @@ export function handleSubmitEmail () {
 
     const { email } = getState().app.login;
 
-    API.requestOTP({email})
-    .then((response) => {
-      if (response.status === 'error') {
-        const errorMessage = response.message;
+    emailValidator.validate({email})
+    .then(result => {
+      if (!result.valid) {
         return dispatch({
           type: HANDLE_EMAIL_FAILURE,
-          error: errorMessage
+          error: result.errors.email[0]
         });
       }
 
-      dispatch({
-        type: HANDLE_OTP_SENT
-      });
-    })
-    .catch((e) => console.log('error caught in request OTP ', e));
+      API.requestOTP({email})
+      .then((response) => {
+        if (response.status === 'error') {
+          // const errorMessage = response.message;
+          return dispatch({
+            type: HANDLE_EMAIL_FAILURE,
+            error: 'Cannot Log In. Begin using Cheapass on the web and then come back!'
+          });
+        }
+
+        dispatch({
+          type: HANDLE_OTP_SENT
+        });
+      })
+      .catch((e) => console.log('error caught in request OTP ', e));
+    });
   };
 }
 
@@ -201,5 +220,11 @@ export function handleReloadAlerts () {
         response
       });
     });
+  };
+}
+
+export function handleEditEmail () {
+  return {
+    type: HANDLE_EDIT_EMAIL
   };
 }

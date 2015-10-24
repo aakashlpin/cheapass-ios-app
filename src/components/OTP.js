@@ -1,5 +1,6 @@
 import React, {PropTypes} from 'react-native';
 import { Icon } from 'react-native-icons';
+import LoadingOverlay from './LoadingOverlay';
 
 var {
   ScrollView,
@@ -23,7 +24,7 @@ export default class Otp extends React.Component {
     this.setState({
       contentOffset: {
         x: 0,
-        y: (height * 1 / 3) + 20
+        y: (height * 1 / 3)
       }
     });
   }
@@ -83,6 +84,7 @@ export default class Otp extends React.Component {
             </View>
           </View>
         </ScrollView>
+        <LoadingOverlay isVisible={isSubmittingOTP} />
       </View>
     );
   }
@@ -101,11 +103,11 @@ Otp.propTypes = {
 var styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
-    paddingTop: 48,
     flexDirection: 'column',
     backgroundColor: '#0B315B'
   },
   title: {
+    paddingTop: 48,
     marginBottom: 20,
     fontSize: 25,
     textAlign: 'center',
@@ -124,7 +126,11 @@ var styles = StyleSheet.create({
   },
   actionText: {
     color: '#69CBF8',
-    fontWeight: '500'
+    fontWeight: '500',
+    paddingTop: 12,
+    paddingBottom: 12,
+    paddingLeft: 16,
+    paddingRight: 16
   },
   formContainer: {
     position: 'absolute',

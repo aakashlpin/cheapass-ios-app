@@ -7,7 +7,8 @@ import {
   HANDLE_OTP_SENT,
   HANDLE_EMAIL_FAILURE,
   HANDLE_CHANGE_OTP,
-  HANDLE_RELOAD_ALERTS
+  HANDLE_RELOAD_ALERTS,
+  HANDLE_EDIT_EMAIL
 } from '../actions/AppActions';
 
 import _ from 'underscore';
@@ -20,6 +21,7 @@ const initialState = {
   login: {
     isSubmittingEmail: false,
     isSubmittingOTP: false,
+    emailAutoFocus: false,
     email: '',
     otp: '',
     errors: {}
@@ -73,7 +75,8 @@ function app (state = initialState, action) {
         ...state,
         login: {
           ...state.login,
-          email
+          email,
+          errors: {}
         }
       };
     }
@@ -83,7 +86,8 @@ function app (state = initialState, action) {
         ...state,
         login: {
           ...state.login,
-          isSubmittingEmail: true
+          isSubmittingEmail: true,
+          emailAutoFocus: false
         }
       };
     }
@@ -126,6 +130,17 @@ function app (state = initialState, action) {
       return {
         ...state,
         tracks: sanitizeResponse(action.response)
+      };
+    }
+
+    case HANDLE_EDIT_EMAIL: {
+      return {
+        ...state,
+        isOTPSent: false,
+        login: {
+          ...state.login,
+          emailAutoFocus: true
+        }
       };
     }
 

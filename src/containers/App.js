@@ -12,7 +12,7 @@ import {
   handleReloadAlerts
 } from '../actions/AppActions';
 
-import Loader from '../components/Loader';
+import LoadingOverlay from '../components/LoadingOverlay';
 import Login from '../components/Login';
 import Otp from '../components/OTP';
 import Header from '../components/Header';
@@ -60,9 +60,9 @@ class App extends React.Component {
   }
 
   render () {
-    const { isLoading, isLoggedIn, isOTPSent, login: {email, otp, isSubmittingEmail, isSubmittingOTP}, tracks } = this.props.app;
+    const { isLoading, isLoggedIn, isOTPSent, login: {email, otp, isSubmittingEmail, isSubmittingOTP, emailAutoFocus, errors}, tracks } = this.props.app;
     if (isLoading) {
-      return <Loader />;
+      return <LoadingOverlay isVisible={true} />;
     }
 
     if (!isLoggedIn) {
@@ -72,6 +72,8 @@ class App extends React.Component {
                 isSubmittingEmail={isSubmittingEmail}
                 onChangeEmail={this.onChangeEmail.bind(this)}
                 onSubmitEmail={this.onSubmitEmail.bind(this)}
+                autoFocus={emailAutoFocus}
+                errors={errors}
               />;
       }
       return <Otp
