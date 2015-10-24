@@ -6,7 +6,8 @@ import {
   HANDLE_SUBMIT_EMAIL,
   HANDLE_OTP_SENT,
   HANDLE_EMAIL_FAILURE,
-  HANDLE_CHANGE_OTP
+  HANDLE_CHANGE_OTP,
+  HANDLE_RELOAD_ALERTS
 } from '../actions/AppActions';
 
 import _ from 'underscore';
@@ -26,6 +27,13 @@ const initialState = {
   tracks: []
 };
 
+function sanitizeResponse (response) {
+  return _.flatten(response.reduce((clubbed, result) => {
+    clubbed.push(result.tracks);
+    return clubbed;
+  }, []));
+}
+
 function app (state = initialState, action) {
   switch (action.type) {
     case HANDLE_INITIAL_APP_LOAD: {
@@ -44,11 +52,7 @@ function app (state = initialState, action) {
     }
     case INIT_APP_WITH_DASHBOARD: {
       const { email, response } = action;
-      const flattenedResults = _.flatten(response.reduce((clubbed, result) => {
-        clubbed.push(result.tracks);
-        return clubbed;
-      }, []));
-
+      const flattenedResults = sanitizeResponse(response);
       return {
         ...state,
         isLoading: false,
@@ -115,6 +119,13 @@ function app (state = initialState, action) {
           ...state.login,
           otp: action.otp
         }
+      };
+    }
+
+    case HANDLE_RELOAD_ALERTS: {
+      return {
+        ...state,
+        tracks: sanitizeResponse(action.response)
       };
     }
 

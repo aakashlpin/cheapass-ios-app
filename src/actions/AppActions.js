@@ -12,6 +12,7 @@ export const HANDLE_EMAIL_FAILURE = 'HANDLE_EMAIL_FAILURE';
 export const HANDLE_RESEND_OTP = 'HANDLE_RESEND_OTP';
 export const HANDLE_RESEND_OTP_SUCCESS = 'HANDLE_RESEND_OTP_SUCCESS';
 export const HANDLE_RESEND_OTP_FAILURE = 'HANDLE_RESEND_OTP_FAILURE';
+export const HANDLE_RELOAD_ALERTS = 'HANDLE_RELOAD_ALERTS';
 
 import {
   AsyncStorage
@@ -185,6 +186,19 @@ export function handleResendOTP () {
 
       dispatch({
         type: HANDLE_RESEND_OTP_FAILURE
+      });
+    });
+  };
+}
+
+export function reloadAlerts () {
+  return (dispatch, getState) => {
+    const { email } = getState().app.login;
+    API.getDashboard(email)
+    .then((response) => {
+      dispatch({
+        type: HANDLE_RELOAD_ALERTS,
+        response
       });
     });
   };
