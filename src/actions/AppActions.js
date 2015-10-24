@@ -191,11 +191,11 @@ export function handleResendOTP () {
   };
 }
 
-export function reloadAlerts () {
+export function handleReloadAlerts () {
   return (dispatch, getState) => {
     const { email } = getState().app.login;
     API.getDashboard(email)
-    .then((response) => {
+    .then(response => {
       dispatch({
         type: HANDLE_RELOAD_ALERTS,
         response

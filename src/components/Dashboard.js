@@ -2,9 +2,6 @@ import React from 'react-native';
 import Swipeout from 'react-native-swipeout';
 import RefreshableListView from 'react-native-refreshable-listview';
 import { Icon } from 'react-native-icons';
-import {
-  reloadAlerts
-} from '../actions/AppActions';
 
 var {
   View,
@@ -72,10 +69,6 @@ export default class Dashboard extends React.Component {
     );
   }
 
-  handleReloadAlerts () {
-    reloadAlerts();
-  }
-
   renderResults () {
     var { results } = this.props.data.dashboardProps;
     var ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
@@ -86,7 +79,7 @@ export default class Dashboard extends React.Component {
         dataSource={listViewDataSource}
         renderSectionHeader={this.renderHeader.bind(this)}
         renderRow={this.renderTrack.bind(this)}
-        loadData={this.handleReloadAlerts}
+        loadData={this.props.onReloadAlerts}
         refreshDescription="Refreshing Alerts..."
         />
     );
@@ -144,7 +137,8 @@ export default class Dashboard extends React.Component {
 }
 
 Dashboard.propTypes = {
-  data: PropTypes.object.isRequired
+  data: PropTypes.object.isRequired,
+  onReloadAlerts: PropTypes.func.isRequired
 };
 
 var styles = StyleSheet.create({

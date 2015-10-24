@@ -8,7 +8,8 @@ import {
   handleChangeOTP,
   handleSubmitOTP,
   handleResendOTP,
-  handleEditEmail
+  handleEditEmail,
+  handleReloadAlerts
 } from '../actions/AppActions';
 
 import Loader from '../components/Loader';
@@ -54,6 +55,10 @@ class App extends React.Component {
     this.props.dispatch(handleEditEmail());
   }
 
+  onReloadAlerts () {
+    this.props.dispatch(handleReloadAlerts());
+  }
+
   render () {
     const { isLoading, isLoggedIn, isOTPSent, login: {email, otp, isSubmittingEmail, isSubmittingOTP}, tracks } = this.props.app;
     if (isLoading) {
@@ -81,7 +86,7 @@ class App extends React.Component {
     }
 
     return (
-      <Dashboard data={{dashboardProps: { results: tracks, email: email }}}>
+      <Dashboard data={{dashboardProps: { results: tracks, email: email }}} onReloadAlerts={this.onReloadAlerts.bind(this)}>
         <Header email={email} onPressLogout={this.onLogout.bind(this)} />
       </Dashboard>
     );
