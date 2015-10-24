@@ -145,7 +145,8 @@ var styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'column',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    backgroundColor: '#0B315B'
   },
   tracksHeader: {
     justifyContent: 'space-between',
@@ -187,7 +188,8 @@ var styles = StyleSheet.create({
     borderBottomColor: '#ccc'
   },
   listItemProductNameContainer: {
-    width: 150
+    width: 150,
+    paddingRight: 6
   },
   iconCart: {
     height: 60,

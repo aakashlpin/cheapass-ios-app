@@ -69,16 +69,17 @@ class App extends React.Component {
       if (!isOTPSent) {
         return <Login
                 email={email}
+                autoFocus={emailAutoFocus}
+                errors={errors}
                 isSubmittingEmail={isSubmittingEmail}
                 onChangeEmail={this.onChangeEmail.bind(this)}
                 onSubmitEmail={this.onSubmitEmail.bind(this)}
-                autoFocus={emailAutoFocus}
-                errors={errors}
               />;
       }
       return <Otp
-              email={email}
               otp={otp}
+              email={email}
+              errors={errors}
               isSubmittingOTP={isSubmittingOTP}
               onChangeOTP={this.onChangeOTP.bind(this)}
               onSubmitOTP={this.onSubmitOTP.bind(this)}

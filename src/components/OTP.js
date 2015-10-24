@@ -36,7 +36,7 @@ export default class Otp extends React.Component {
   }
 
   render () {
-    const {email, otp, isSubmittingOTP} = this.props;
+    const {email, otp, isSubmittingOTP, errors} = this.props;
     return (
       <View style={styles.mainContainer}>
         <Text style={styles.title}>Cheapass</Text>
@@ -74,6 +74,7 @@ export default class Otp extends React.Component {
                 style={styles.iconRightArrow}
               />
             </View>
+            <Text style={styles.emailNotFound}>{errors.otp ? errors.otp : ''}</Text>
             <View style={styles.actionsContainer}>
               <TouchableHighlight onPress={this.props.onResendOTP}>
                 <Text style={styles.actionText}>Resend OTP</Text>
@@ -167,5 +168,13 @@ var styles = StyleSheet.create({
     justifyContent: 'space-around',
     alignItems: 'center',
     height: 60
+  },
+  emailNotFound: {
+    fontWeight: '600',
+    color: '#FF5E84',
+    fontSize: 16,
+    padding: 10,
+    paddingBottom: 0,
+    height: 50
   }
 });

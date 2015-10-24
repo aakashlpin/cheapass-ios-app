@@ -1,14 +1,21 @@
 import {
   HANDLE_INITIAL_APP_LOAD,
   INIT_APP_WITH_LOGIN,
-  INIT_APP_WITH_DASHBOARD,
   HANDLE_CHANGE_EMAIL,
   HANDLE_SUBMIT_EMAIL,
   HANDLE_OTP_SENT,
   HANDLE_EMAIL_FAILURE,
   HANDLE_CHANGE_OTP,
   HANDLE_RELOAD_ALERTS,
-  HANDLE_EDIT_EMAIL
+  HANDLE_EDIT_EMAIL,
+  HANDLE_SUBMIT_OTP,
+  HANDLE_SUBMIT_OTP_SUCCESS,
+  HANDLE_SUBMIT_OTP_FAILURE,
+  HANDLE_RESEND_OTP,
+  HANDLE_RESEND_OTP_SUCCESS,
+  HANDLE_RESEND_OTP_FAILURE,
+  HANDLE_LOAD_DASHBOARD,
+  HANDLE_LOAD_DASHBOARD_SUCCESS
 } from '../actions/AppActions';
 
 import _ from 'underscore';
@@ -52,7 +59,15 @@ function app (state = initialState, action) {
         isOTPSent: false
       };
     }
-    case INIT_APP_WITH_DASHBOARD: {
+
+    case HANDLE_LOAD_DASHBOARD: {
+      return {
+        ...state,
+        isLoading: true
+      };
+    }
+
+    case HANDLE_LOAD_DASHBOARD_SUCCESS: {
       const { email, response } = action;
       const flattenedResults = sanitizeResponse(response);
       return {
@@ -121,7 +136,8 @@ function app (state = initialState, action) {
         ...state,
         login: {
           ...state.login,
-          otp: action.otp
+          otp: action.otp,
+          errors: {}
         }
       };
     }
@@ -140,6 +156,42 @@ function app (state = initialState, action) {
         login: {
           ...state.login,
           emailAutoFocus: true
+        }
+      };
+    }
+
+    case HANDLE_SUBMIT_OTP:
+    case HANDLE_RESEND_OTP: {
+      return {
+        ...state,
+        login: {
+          ...state.login,
+          isSubmittingOTP: true
+        }
+      };
+    }
+
+    case HANDLE_SUBMIT_OTP_SUCCESS:
+    case HANDLE_RESEND_OTP_SUCCESS:
+    case HANDLE_RESEND_OTP_FAILURE: {
+      return {
+        ...state,
+        login: {
+          ...state.login,
+          isSubmittingOTP: false
+        }
+      };
+    }
+
+    case HANDLE_SUBMIT_OTP_FAILURE: {
+      return {
+        ...state,
+        login: {
+          ...state.login,
+          isSubmittingOTP: false,
+          errors: {
+            otp: action.error
+          }
         }
       };
     }

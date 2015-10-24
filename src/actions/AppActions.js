@@ -1,6 +1,5 @@
 export const HANDLE_INITIAL_APP_LOAD = 'HANDLE_INITIAL_APP_LOAD';
 export const INIT_APP_WITH_LOGIN = 'INIT_APP_WITH_LOGIN';
-export const INIT_APP_WITH_DASHBOARD = 'INIT_APP_WITH_DASHBOARD';
 export const HANDLE_CHANGE_EMAIL = 'HANDLE_CHANGE_EMAIL';
 export const HANDLE_SUBMIT_EMAIL = 'HANDLE_SUBMIT_EMAIL';
 export const HANDLE_CHANGE_OTP = 'HANDLE_CHANGE_OTP';
@@ -14,6 +13,8 @@ export const HANDLE_RESEND_OTP_SUCCESS = 'HANDLE_RESEND_OTP_SUCCESS';
 export const HANDLE_RESEND_OTP_FAILURE = 'HANDLE_RESEND_OTP_FAILURE';
 export const HANDLE_RELOAD_ALERTS = 'HANDLE_RELOAD_ALERTS';
 export const HANDLE_EDIT_EMAIL = 'HANDLE_EDIT_EMAIL';
+export const HANDLE_LOAD_DASHBOARD = 'HANDLE_LOAD_DASHBOARD';
+export const HANDLE_LOAD_DASHBOARD_SUCCESS = 'HANDLE_LOAD_DASHBOARD_SUCCESS';
 
 import LGTM from 'lgtm';
 const emailValidator =
@@ -21,6 +22,12 @@ const emailValidator =
   .validates('email')
     .required('Enter your registered Email ID')
     .email('Enter a valid Email ID')
+  .build();
+
+const otpValidator =
+  LGTM.validator()
+  .validates('otp')
+    .required('Enter the OTP to view your Dashboard')
   .build();
 
 import {
@@ -37,10 +44,13 @@ import API from '../apis/API';
 import PushManager from '../components/RemotePushIOS';
 
 function navigateToDashboard ({dispatch, email}) {
+  dispatch({
+    type: HANDLE_LOAD_DASHBOARD
+  });
   API.getDashboard(email)
   .then((response) => {
     dispatch({
-      type: INIT_APP_WITH_DASHBOARD,
+      type: HANDLE_LOAD_DASHBOARD_SUCCESS,
       email, response
     });
   });
@@ -167,23 +177,32 @@ export function handleSubmitOTP () {
 
     const { email, otp } = getState().app.login;
 
-
-    API.verifyOTP({email, 'verify_code': otp})
-    .then((response) => {
-      if (response.status) {
-        dispatch({
-          type: HANDLE_SUBMIT_OTP_SUCCESS
+    otpValidator.validate({otp})
+    .then(result => {
+      if (!result.valid) {
+        return dispatch({
+          type: HANDLE_SUBMIT_OTP_FAILURE,
+          error: result.errors.otp[0]
         });
-        AsyncStorage.setItem(STORAGE_KEY_IS_LOGGED_IN, 'true');
-        AsyncStorage.setItem(STORAGE_KEY_EMAIL, email);
-        return navigateToDashboard({dispatch, email});
       }
 
-      dispatch({
-        type: HANDLE_SUBMIT_OTP_FAILURE
+      API.verifyOTP({email, 'verify_code': otp})
+      .then(response => {
+        if (response.status) {
+          dispatch({
+            type: HANDLE_SUBMIT_OTP_SUCCESS
+          });
+          AsyncStorage.setItem(STORAGE_KEY_IS_LOGGED_IN, 'true');
+          AsyncStorage.setItem(STORAGE_KEY_EMAIL, email);
+          return navigateToDashboard({dispatch, email});
+        }
+
+        dispatch({
+          type: HANDLE_SUBMIT_OTP_FAILURE,
+          error: 'Invalid OTP. Please try again.'
+        });
       });
     });
-
   };
 }
 
