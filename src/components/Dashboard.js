@@ -145,8 +145,8 @@ var styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'column',
-    justifyContent: 'center',
-    backgroundColor: '#0B315B'
+    justifyContent: 'center'
+    // backgroundColor: '#0B315B'
   },
   tracksHeader: {
     justifyContent: 'space-between',
