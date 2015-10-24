@@ -3,7 +3,10 @@ import {
   INIT_APP_WITH_LOGIN,
   INIT_APP_WITH_DASHBOARD,
   HANDLE_CHANGE_EMAIL,
-  HANDLE_SUBMIT_EMAIL
+  HANDLE_SUBMIT_EMAIL,
+  HANDLE_OTP_SENT,
+  HANDLE_EMAIL_FAILURE,
+  HANDLE_CHANGE_OTP
 } from '../actions/AppActions';
 
 import _ from 'underscore';
@@ -11,10 +14,14 @@ import _ from 'underscore';
 const initialState = {
   isLoading: true,
   isLoggedIn: false,
+  isOTPSent: false,
   isAppInstalled: false,
   login: {
-    isSubmitting: false,
-    email: ''
+    isSubmittingEmail: false,
+    isSubmittingOTP: false,
+    email: '',
+    otp: '',
+    errors: {}
   },
   tracks: []
 };
@@ -31,7 +38,8 @@ function app (state = initialState, action) {
       return {
         ...state,
         isLoading: false,
-        isLoggedIn: false
+        isLoggedIn: false,
+        isOTPSent: false
       };
     }
     case INIT_APP_WITH_DASHBOARD: {
@@ -48,7 +56,8 @@ function app (state = initialState, action) {
         login: {
           ...state.login,
           email,
-          isSubmitting: false
+          isSubmittingEmail: false,
+          isSubmittingOTP: false
         },
         tracks: flattenedResults
       };
@@ -70,7 +79,41 @@ function app (state = initialState, action) {
         ...state,
         login: {
           ...state.login,
-          isSubmitting: true
+          isSubmittingEmail: true
+        }
+      };
+    }
+
+    case HANDLE_OTP_SENT: {
+      return {
+        ...state,
+        isOTPSent: true,
+        login: {
+          ...state.login,
+          isSubmittingEmail: false
+        }
+      };
+    }
+
+    case HANDLE_EMAIL_FAILURE: {
+      return {
+        ...state,
+        login: {
+          ...state.login,
+          isSubmittingEmail: false,
+          errors: {
+            email: action.error
+          }
+        }
+      };
+    }
+
+    case HANDLE_CHANGE_OTP: {
+      return {
+        ...state,
+        login: {
+          ...state.login,
+          otp: action.otp
         }
       };
     }

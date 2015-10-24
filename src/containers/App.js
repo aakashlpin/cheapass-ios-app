@@ -4,11 +4,16 @@ import {
   handleInitialAppLoad,
   handleChangeEmail,
   handleSubmitEmail,
-  handleLogout
+  handleLogout,
+  handleChangeOTP,
+  handleSubmitOTP,
+  handleResendOTP,
+  handleEditEmail
 } from '../actions/AppActions';
 
 import Loader from '../components/Loader';
 import Login from '../components/Login';
+import Otp from '../components/OTP';
 import Header from '../components/Header';
 import Dashboard from '../components/Dashboard';
 
@@ -29,23 +34,50 @@ class App extends React.Component {
     this.props.dispatch(handleSubmitEmail());
   }
 
+  onChangeOTP ({otp}) {
+    this.props.dispatch(handleChangeOTP({otp}));
+  }
+
+  onSubmitOTP () {
+    this.props.dispatch(handleSubmitOTP());
+  }
+
   onLogout () {
     this.props.dispatch(handleLogout());
   }
 
+  onResendOTP () {
+    this.props.dispatch(handleResendOTP());
+  }
+
+  onEditEmail () {
+    this.props.dispatch(handleEditEmail());
+  }
+
   render () {
-    const { isLoading, isLoggedIn, login: {email, isSubmitting}, tracks } = this.props.app;
+    const { isLoading, isLoggedIn, isOTPSent, login: {email, otp, isSubmittingEmail, isSubmittingOTP}, tracks } = this.props.app;
     if (isLoading) {
       return <Loader />;
     }
 
     if (!isLoggedIn) {
-      return <Login
-        email={email}
-        isSubmitting={isSubmitting}
-        onChangeEmail={this.onChangeEmail.bind(this)}
-        onSubmitEmail={this.onSubmitEmail.bind(this)}
-      />;
+      if (!isOTPSent) {
+        return <Login
+                email={email}
+                isSubmittingEmail={isSubmittingEmail}
+                onChangeEmail={this.onChangeEmail.bind(this)}
+                onSubmitEmail={this.onSubmitEmail.bind(this)}
+              />;
+      }
+      return <Otp
+              email={email}
+              otp={otp}
+              isSubmittingOTP={isSubmittingOTP}
+              onChangeOTP={this.onChangeOTP.bind(this)}
+              onSubmitOTP={this.onSubmitOTP.bind(this)}
+              onResendOTP={this.onResendOTP.bind(this)}
+              onEditEmail={this.onEditEmail.bind(this)}
+            />;
     }
 
     return <Dashboard

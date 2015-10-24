@@ -1,4 +1,4 @@
-import React from 'react-native';
+import React, {PropTypes} from 'react-native';
 import { Icon } from 'react-native-icons';
 
 var {
@@ -8,10 +8,10 @@ var {
   StyleSheet,
   TextInput,
   Dimensions,
-  StatusBarIOS
+  TouchableHighlight
 } = React;
 
-export default class Login extends React.Component {
+export default class Otp extends React.Component {
   constructor () {
     super();
     this.state = {
@@ -23,7 +23,7 @@ export default class Login extends React.Component {
     this.setState({
       contentOffset: {
         x: 0,
-        y: (height * 1 / 3) + 50
+        y: (height * 1 / 3) + 20
       }
     });
   }
@@ -34,38 +34,37 @@ export default class Login extends React.Component {
     });
   }
 
-  componentDidMount () {
-    StatusBarIOS.setHidden(true);
-  }
-
   render () {
-    const {email, isSubmittingEmail} = this.props;
+    const {email, otp, isSubmittingOTP} = this.props;
     return (
       <View style={styles.mainContainer}>
         <Text style={styles.title}>Cheapass</Text>
         <ScrollView contentContainerStyle={{flex: 1}} contentOffset={this.state.contentOffset}>
+
           <View style={styles.formContainer}>
+            <Text style={styles.otpSentTo}>OTP sent to</Text>
+            <Text style={styles.otpSentToEmail}>{email}</Text>
             <View style={styles.emailInputBar}>
               <Icon
-                name='ion|ios-email'
-                size={40}
+                name='ion|lock-combination'
+                size={28}
                 color='#5FC9FC'
                 style={styles.iconEmail}
               />
               <TextInput
                 style={styles.emailInput}
-                value={email}
-                placeholder="Enter Email ID to Login"
+                value={otp}
+                placeholder="Enter OTP"
                 placeholderTextColor="#69CBF8"
-                editable={!isSubmittingEmail}
+                editable={!isSubmittingOTP}
                 autoCapitalize="none"
                 autoCorrect={false}
-                keyboardType={'email-address'}
+                keyboardType="numbers-and-punctuation"
                 enablesReturnKeyAutomatically={true}
                 onFocus={() => this.onFocus()}
                 onBlur={() => this.onBlur()}
-                onSubmitEditing={() => this.props.onSubmitEmail()}
-                onChangeText={(text) => this.props.onChangeEmail({email: text})}
+                onSubmitEditing={() => this.props.onSubmitOTP()}
+                onChangeText={(text) => this.props.onChangeOTP({otp: text})}
               />
               <Icon
                 name="ion|ios-arrow-thin-right"
@@ -74,6 +73,14 @@ export default class Login extends React.Component {
                 style={styles.iconRightArrow}
               />
             </View>
+            <View style={styles.actionsContainer}>
+              <TouchableHighlight onPress={this.props.onResendOTP}>
+                <Text style={styles.actionText}>Resend OTP</Text>
+              </TouchableHighlight>
+              <TouchableHighlight onPress={this.props.onEditEmail}>
+                <Text style={styles.actionText}>Change Email ID</Text>
+              </TouchableHighlight>
+            </View>
           </View>
         </ScrollView>
       </View>
@@ -81,11 +88,14 @@ export default class Login extends React.Component {
   }
 }
 
-Login.propTypes = {
-  email: React.PropTypes.string.isRequired,
-  isSubmittingEmail: React.PropTypes.bool.isRequired,
-  onChangeEmail: React.PropTypes.func.isRequired,
-  onSubmitEmail: React.PropTypes.func.isRequired
+Otp.propTypes = {
+  email: PropTypes.string.isRequired,
+  otp: PropTypes.string.isRequired,
+  isSubmittingOTP: PropTypes.bool.isRequired,
+  onChangeOTP: PropTypes.func.isRequired,
+  onSubmitOTP: PropTypes.func.isRequired,
+  onResendOTP: PropTypes.func.isRequired,
+  onEditEmail: PropTypes.func.isRequired
 };
 
 var styles = StyleSheet.create({
@@ -101,6 +111,21 @@ var styles = StyleSheet.create({
     textAlign: 'center',
     color: '#fff'
   },
+  otpSentTo: {
+    color: 'rgba(255,255,255,0.35)',
+    alignSelf: 'center',
+    fontWeight: '500'
+  },
+  otpSentToEmail: {
+    color: 'rgba(255,255,255,0.35)',
+    alignSelf: 'center',
+    paddingBottom: 12,
+    fontWeight: '500'
+  },
+  actionText: {
+    color: '#69CBF8',
+    fontWeight: '500'
+  },
   formContainer: {
     position: 'absolute',
     bottom: 80,
@@ -114,12 +139,11 @@ var styles = StyleSheet.create({
     alignItems: 'center',
     height: 60,
     padding: 10,
-    marginBottom: 16,
     backgroundColor: '#24456B'
   },
   iconEmail: {
-    height: 18,
-    width: 25
+    height: 30,
+    width: 30
   },
   iconRightArrow: {
     height: 18,
@@ -130,5 +154,12 @@ var styles = StyleSheet.create({
     color: 'white',
     paddingLeft: 10,
     flex: 1
+  },
+  actionsContainer: {
+    flexDirection: 'row',
+    flexWrap: 'nowrap',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    height: 60
   }
 });
