@@ -117,8 +117,11 @@ export default class Dashboard extends React.Component {
               <Text style={{}}>{track.productName}</Text>
             </View>
             <View style={styles.listItemProductDetailsContainer}>
-              <Text style={{}}>Rs. {track.currentPrice}/-</Text>
-              <Text style={{}}>{track.seller}</Text>
+              <Text style={styles.price}>Rs. {track.currentPrice}/-</Text>
+              <View style={[styles.sellerTag, track.isFavourable ? styles.favourableBuy : styles.unfavourableBuy]}>
+                <Icon name={track.isFavourable ? 'ion|arrow-down-c' : 'ion|arrow-up-c'} size={14} color="#fff" style={{height: 14, width: 8, marginRight: 2}} />
+                <Text style={styles.sellerName}>{track.seller}</Text>
+              </View>
             </View>
           </View>
         </View>
@@ -195,5 +198,30 @@ var styles = StyleSheet.create({
     height: 60,
     width: 60,
     flex: 1
+  },
+  listItemProductDetailsContainer: {
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'flex-end'
+  },
+  price: {
+    marginBottom: 5
+  },
+  sellerTag: {
+    padding: 3,
+    borderRadius: 2,
+    fontSize: 12,
+    flexDirection: 'row',
+    justifyContent: 'space-around'
+  },
+  favourableBuy: {
+    backgroundColor: '#30C077'
+  },
+  unfavourableBuy: {
+    backgroundColor: '#FD4B47'
+  },
+  sellerName: {
+    color: '#fff',
+    fontSize: 12
   }
 });

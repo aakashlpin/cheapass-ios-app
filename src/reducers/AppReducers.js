@@ -20,6 +20,17 @@ import {
 
 import _ from 'underscore';
 
+const sellerMap = {
+  flipkart: 'Flipkart',
+  amazon: 'Amazon',
+  zivame: 'Zivame',
+  fabfurnish: 'FabFurnish',
+  healthkart: 'HealthKart',
+  jabong: 'Jabong',
+  infibeam: 'Infibeam',
+  snapdeal: 'Snapdeal'
+};
+
 const initialState = {
   isLoading: true,
   isLoggedIn: false,
@@ -37,10 +48,23 @@ const initialState = {
 };
 
 function sanitizeResponse (response) {
-  return _.flatten(response.reduce((clubbed, result) => {
-    clubbed.push(result.tracks);
-    return clubbed;
-  }, []));
+  return _.flatten(
+    response.map(item => {
+      return {
+        tracks: item.tracks.map(track => {
+          return {
+            ...track,
+            seller: sellerMap[item.seller],
+            isFavourable: track.alertToPrice ? track.currentPrice <= track.alertToPrice : true
+          };
+        })
+      };
+    })
+    .reduce((clubbed, result) => {
+      clubbed.push(result.tracks);
+      return clubbed;
+    }, [])
+  );
 }
 
 function app (state = initialState, action) {
