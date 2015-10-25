@@ -11,7 +11,8 @@ var {
   Image,
   Text,
   AlertIOS,
-  LinkingIOS
+  LinkingIOS,
+  Dimensions
 } = React;
 
 var PushManager = require('./RemotePushIOS');
@@ -56,8 +57,10 @@ export default class Dashboard extends React.Component {
 
   componentDidMount () {
     PushManager.setListenerForNotifications(this.receiveRemoteNotification);
-
-    // setTimeout(this.measureMainComponent.bind(this));
+    this.setState({
+      ...this.state,
+      productNameDynamicWidth: {width: (Dimensions.get('window').width / 2) - 10}
+    });
   }
 
   render () {
@@ -113,7 +116,7 @@ export default class Dashboard extends React.Component {
             <Image style={styles.listItemLeftImage} source={{uri: track.productImage}} />
           </View>
           <View style={styles.listItemContainerRightChild}>
-            <View style={styles.listItemProductNameContainer}>
+            <View style={[styles.listItemProductNameContainer, this.state.productNameDynamicWidth]}>
               <Text style={{}}>{track.productName}</Text>
             </View>
             <View style={styles.listItemProductDetailsContainer}>
