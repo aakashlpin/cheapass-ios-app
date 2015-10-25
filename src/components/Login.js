@@ -1,15 +1,13 @@
 import React from 'react-native';
 import { Icon } from 'react-native-icons';
-import LoadingOverlay from './LoadingOverlay';
+import LoggedOutWrapper from './LoggedOutWrapper';
 import styles from '../styles/login.styles';
 
 var {
-  ScrollView,
   View,
   Text,
   TextInput,
   Dimensions,
-  StatusBarIOS,
   TouchableHighlight
 } = React;
 
@@ -36,57 +34,49 @@ export default class Login extends React.Component {
     });
   }
 
-  componentDidMount () {
-    StatusBarIOS.setHidden(true);
-  }
-
   render () {
     const {email, isSubmittingEmail, autoFocus = false, errors} = this.props;
     return (
-      <View style={styles.mainContainer}>
-        <Text style={styles.title}>Cheapass</Text>
-        <ScrollView contentContainerStyle={{flex: 1}} contentOffset={this.state.contentOffset} keyboardShouldPersistTaps={true}>
-          <View style={styles.formContainer}>
-            <View style={styles.emailInputBar}>
-              <View style={{padding: 10}}>
-                <Icon
-                  name='ion|ios-email'
-                  size={40}
-                  color='#5FC9FC'
-                  style={styles.iconEmail}
-                />
-              </View>
-              <TextInput
-                style={styles.emailInput}
-                value={email}
-                placeholder="Enter Email ID to Login"
-                placeholderTextColor="#69CBF8"
-                editable={!isSubmittingEmail}
-                autoCapitalize="none"
-                autoCorrect={false}
-                autoFocus={autoFocus}
-                returnKeyType={'next'}
-                keyboardType={'email-address'}
-                enablesReturnKeyAutomatically={true}
-                onFocus={() => this.onFocus()}
-                onBlur={() => this.onBlur()}
-                onSubmitEditing={() => this.props.onSubmitEmail()}
-                onChangeText={(text) => this.props.onChangeEmail({email: text})}
+      <LoggedOutWrapper showLoader={isSubmittingEmail} contentOffset={this.state.contentOffset}>
+        <View style={styles.formContainer}>
+          <View style={styles.emailInputBar}>
+            <View style={{padding: 10}}>
+              <Icon
+                name='ion|ios-email'
+                size={40}
+                color='#5FC9FC'
+                style={styles.iconEmail}
               />
-              <TouchableHighlight style={{padding: 10}} underlayColor="#22446C" onPress={this.props.onSubmitEmail}>
-                <Icon
-                  name="ion|ios-arrow-thin-right"
-                  size={40}
-                  color='#fff'
-                  style={styles.iconRightArrow}
-                />
-              </TouchableHighlight>
             </View>
-            <Text style={styles.emailNotFound}>{errors.email ? errors.email : ''}</Text>
+            <TextInput
+              style={styles.emailInput}
+              value={email}
+              placeholder="Enter Email ID to Login"
+              placeholderTextColor="#69CBF8"
+              editable={!isSubmittingEmail}
+              autoCapitalize="none"
+              autoCorrect={false}
+              autoFocus={autoFocus}
+              returnKeyType={'next'}
+              keyboardType={'email-address'}
+              enablesReturnKeyAutomatically={true}
+              onFocus={() => this.onFocus()}
+              onBlur={() => this.onBlur()}
+              onSubmitEditing={() => this.props.onSubmitEmail()}
+              onChangeText={(text) => this.props.onChangeEmail({email: text})}
+            />
+            <TouchableHighlight style={{padding: 10}} underlayColor="#22446C" onPress={this.props.onSubmitEmail}>
+              <Icon
+                name="ion|ios-arrow-thin-right"
+                size={40}
+                color='#fff'
+                style={styles.iconRightArrow}
+              />
+            </TouchableHighlight>
           </View>
-        </ScrollView>
-        <LoadingOverlay isVisible={isSubmittingEmail} />
-      </View>
+          <Text style={styles.emailNotFound}>{errors.email ? errors.email : ''}</Text>
+        </View>
+      </LoggedOutWrapper>
     );
   }
 }
