@@ -1,10 +1,30 @@
 # iOS App for Cheapass
 https://cheapass.in
 
-This README is going to be a progress report of how the app shapes up over the course of time -
+### Introduction
+Cheapass is a little bot that monitors prices of all the items you might be interested in buying. When the price is favourable, it sends you a price drop alert.
 
-Dashboard on Day 1 (11/10/2015 11:51PM) -
+Until now, the alerts were sent using emails. But with this app, you receive these alerts via **Push Notifications**.
 
-![Dashboard](https://dl.dropbox.com/s/2l71c4yb4ibd0p8/Screenshot%202015-10-11%2023.45.56.png)
+### Roadmap
+
+- [ ] Create an App Extension that appears in the Action Sheet. This would let users quickly add new alerts from other e-commerce mobile apps.
+
+- [ ] Let users customize when they want to receive these push notifications. The app would be the client to record such preferences while the actual logic will be handled in the backend (That repo is _still_ not open sourced, though).
+
+- [ ] Allow deleting alerts from within app.
+
+- [ ] Allow sharing alerts via Action Sheet.
+
+### Tech
+
+This app is made possible thanks to the vibrant community building [React Native](https://facebook.github.io/react-native/) in open source.
 
 
+### People
+
+Coded by [Aakash Goel](https://twitter.com/aakashlpin) and Designed by [Hardik Pandya](https://twitter.com/hvpandya).
+
+### Support
+
+This is an open source app and you can [View issues](https://github.com/aakashlpin/cheapass-ios-app/issues) or [Create a new issue](https://github.com/aakashlpin/cheapass-ios-app/issues). I will get to them over the weekends.
