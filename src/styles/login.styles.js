@@ -18,7 +18,7 @@ const LoginStyles = StyleSheet.create({
     textAlign: 'center',
     width: 250,
     color: 'rgba(255, 255, 255, 0.65)',
-    fontSize: 16,
+    fontSize: 16
     // fontWeight: '600'
   },
   formContainer: {
