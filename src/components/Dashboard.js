@@ -120,7 +120,7 @@ export default class Dashboard extends React.Component {
               <Text style={{}}>{track.productName}</Text>
             </View>
             <View style={styles.listItemProductDetailsContainer}>
-              <Text style={styles.price}>₹{track.currentPrice}/-</Text>
+              <Text style={styles.price}>₹{track.humanPrice}/-</Text>
               <View style={[styles.sellerTag, track.isFavourable ? styles.favourableBuy : styles.unfavourableBuy]}>
                 <Icon name={track.isFavourable ? 'ion|arrow-down-c' : 'ion|arrow-up-c'} size={14} color="#fff" style={{height: 14, width: 8, marginRight: 2}} />
                 <Text style={styles.sellerName}>{track.seller}</Text>

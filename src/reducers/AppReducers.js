@@ -47,6 +47,10 @@ const initialState = {
   tracks: []
 };
 
+function numberWithCommas(x) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
 function sanitizeResponse (response) {
   return _.flatten(
     response.map(item => {
@@ -55,7 +59,8 @@ function sanitizeResponse (response) {
           return {
             ...track,
             seller: sellerMap[item.seller],
-            isFavourable: track.alertToPrice ? track.currentPrice <= track.alertToPrice : true
+            isFavourable: track.alertToPrice ? track.currentPrice <= track.alertToPrice : true,
+            humanPrice: numberWithCommas(track.currentPrice)
           };
         })
       };
