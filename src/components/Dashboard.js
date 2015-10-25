@@ -220,7 +220,6 @@ var styles = StyleSheet.create({
   sellerTag: {
     padding: 3,
     borderRadius: 2,
-    fontSize: 12,
     flexDirection: 'row',
     justifyContent: 'space-around'
   },
