@@ -109,7 +109,8 @@ function app (state = initialState, action) {
     }
 
     case HANDLE_CHANGE_EMAIL: {
-      const {email} = action;
+      let {email} = action;
+      email = email.trim();
       return {
         ...state,
         login: {
@@ -160,7 +161,7 @@ function app (state = initialState, action) {
         ...state,
         login: {
           ...state.login,
-          otp: action.otp,
+          otp: action.otp.trim(),
           errors: {}
         }
       };

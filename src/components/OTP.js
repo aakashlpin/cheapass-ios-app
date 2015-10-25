@@ -1,12 +1,12 @@
 import React, {PropTypes} from 'react-native';
 import { Icon } from 'react-native-icons';
 import LoadingOverlay from './LoadingOverlay';
+import styles from '../styles/login.styles';
 
 var {
   ScrollView,
   View,
   Text,
-  StyleSheet,
   TextInput,
   Dimensions,
   TouchableHighlight
@@ -40,18 +40,19 @@ export default class Otp extends React.Component {
     return (
       <View style={styles.mainContainer}>
         <Text style={styles.title}>Cheapass</Text>
-        <ScrollView contentContainerStyle={{flex: 1}} contentOffset={this.state.contentOffset}>
-
+        <ScrollView contentContainerStyle={{flex: 1}} contentOffset={this.state.contentOffset} keyboardShouldPersistTaps={true}>
           <View style={styles.formContainer}>
             <Text style={styles.otpSentTo}>OTP sent to</Text>
             <Text style={styles.otpSentToEmail}>{email}</Text>
             <View style={styles.emailInputBar}>
-              <Icon
-                name='ion|lock-combination'
-                size={28}
-                color='#5FC9FC'
-                style={styles.iconEmail}
-              />
+              <View style={{padding: 10}}>
+                <Icon
+                  name='ion|lock-combination'
+                  size={28}
+                  color='#5FC9FC'
+                  style={styles.iconOTP}
+                />
+              </View>
               <TextInput
                 style={styles.emailInput}
                 value={otp}
@@ -67,12 +68,14 @@ export default class Otp extends React.Component {
                 onSubmitEditing={() => this.props.onSubmitOTP()}
                 onChangeText={(text) => this.props.onChangeOTP({otp: text})}
               />
-              <Icon
-                name="ion|ios-arrow-thin-right"
-                size={40}
-                color='#5FC9FC'
-                style={styles.iconRightArrow}
-              />
+              <TouchableHighlight style={{padding: 10}} underlayColor="#22446C" onPress={this.props.onSubmitOTP}>
+                <Icon
+                  name="ion|ios-arrow-thin-right"
+                  size={40}
+                  color='#fff'
+                  style={styles.iconRightArrow}
+                />
+              </TouchableHighlight>
             </View>
             <Text style={styles.emailNotFound}>{errors.otp ? errors.otp : ''}</Text>
             <View style={styles.actionsContainer}>
@@ -100,81 +103,3 @@ Otp.propTypes = {
   onResendOTP: PropTypes.func.isRequired,
   onEditEmail: PropTypes.func.isRequired
 };
-
-var styles = StyleSheet.create({
-  mainContainer: {
-    flex: 1,
-    flexDirection: 'column',
-    backgroundColor: '#0B315B'
-  },
-  title: {
-    paddingTop: 48,
-    marginBottom: 20,
-    fontSize: 25,
-    textAlign: 'center',
-    color: '#fff'
-  },
-  otpSentTo: {
-    color: 'rgba(255,255,255,0.35)',
-    alignSelf: 'center',
-    fontWeight: '500'
-  },
-  otpSentToEmail: {
-    color: 'rgba(255,255,255,0.35)',
-    alignSelf: 'center',
-    paddingBottom: 12,
-    fontWeight: '500'
-  },
-  actionText: {
-    color: '#69CBF8',
-    fontWeight: '500',
-    paddingTop: 12,
-    paddingBottom: 12,
-    paddingLeft: 16,
-    paddingRight: 16
-  },
-  formContainer: {
-    position: 'absolute',
-    bottom: 80,
-    left: 0,
-    right: 0
-  },
-  emailInputBar: {
-    flexDirection: 'row',
-    flexWrap: 'nowrap',
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    height: 60,
-    padding: 10,
-    backgroundColor: '#24456B'
-  },
-  iconEmail: {
-    height: 30,
-    width: 30
-  },
-  iconRightArrow: {
-    height: 18,
-    width: 26
-  },
-  emailInput: {
-    fontSize: 18,
-    color: 'white',
-    paddingLeft: 10,
-    flex: 1
-  },
-  actionsContainer: {
-    flexDirection: 'row',
-    flexWrap: 'nowrap',
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    height: 60
-  },
-  emailNotFound: {
-    fontWeight: '600',
-    color: '#FF5E84',
-    fontSize: 16,
-    padding: 10,
-    paddingBottom: 0,
-    height: 50
-  }
-});

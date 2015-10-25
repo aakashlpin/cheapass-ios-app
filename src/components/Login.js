@@ -1,12 +1,12 @@
 import React from 'react-native';
 import { Icon } from 'react-native-icons';
 import LoadingOverlay from './LoadingOverlay';
+import styles from '../styles/login.styles';
 
 var {
   ScrollView,
   View,
   Text,
-  StyleSheet,
   TextInput,
   Dimensions,
   StatusBarIOS,
@@ -45,15 +45,17 @@ export default class Login extends React.Component {
     return (
       <View style={styles.mainContainer}>
         <Text style={styles.title}>Cheapass</Text>
-        <ScrollView contentContainerStyle={{flex: 1}} contentOffset={this.state.contentOffset}>
+        <ScrollView contentContainerStyle={{flex: 1}} contentOffset={this.state.contentOffset} keyboardShouldPersistTaps={true}>
           <View style={styles.formContainer}>
             <View style={styles.emailInputBar}>
-              <Icon
-                name='ion|ios-email'
-                size={40}
-                color='#5FC9FC'
-                style={styles.iconEmail}
-              />
+              <View style={{padding: 10}}>
+                <Icon
+                  name='ion|ios-email'
+                  size={40}
+                  color='#5FC9FC'
+                  style={styles.iconEmail}
+                />
+              </View>
               <TextInput
                 style={styles.emailInput}
                 value={email}
@@ -63,6 +65,7 @@ export default class Login extends React.Component {
                 autoCapitalize="none"
                 autoCorrect={false}
                 autoFocus={autoFocus}
+                returnKeyType={'next'}
                 keyboardType={'email-address'}
                 enablesReturnKeyAutomatically={true}
                 onFocus={() => this.onFocus()}
@@ -70,11 +73,11 @@ export default class Login extends React.Component {
                 onSubmitEditing={() => this.props.onSubmitEmail()}
                 onChangeText={(text) => this.props.onChangeEmail({email: text})}
               />
-              <TouchableHighlight onPress={this.props.onSubmitEmail}>
+              <TouchableHighlight style={{padding: 10}} underlayColor="#22446C" onPress={this.props.onSubmitEmail}>
                 <Icon
                   name="ion|ios-arrow-thin-right"
                   size={40}
-                  color='#5FC9FC'
+                  color='#fff'
                   style={styles.iconRightArrow}
                 />
               </TouchableHighlight>
@@ -94,56 +97,3 @@ Login.propTypes = {
   onChangeEmail: React.PropTypes.func.isRequired,
   onSubmitEmail: React.PropTypes.func.isRequired
 };
-
-var styles = StyleSheet.create({
-  mainContainer: {
-    flex: 1,
-    flexDirection: 'column',
-    backgroundColor: '#0B315B'
-  },
-  title: {
-    paddingTop: 48,
-    marginBottom: 20,
-    fontSize: 25,
-    textAlign: 'center',
-    color: '#fff'
-  },
-  formContainer: {
-    position: 'absolute',
-    bottom: 80,
-    left: 0,
-    right: 0
-  },
-  emailInputBar: {
-    flexDirection: 'row',
-    flexWrap: 'nowrap',
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    height: 60,
-    padding: 10,
-    // marginBottom: 16,
-    backgroundColor: '#24456B'
-  },
-  iconEmail: {
-    height: 18,
-    width: 25
-  },
-  iconRightArrow: {
-    height: 18,
-    width: 26
-  },
-  emailInput: {
-    fontSize: 18,
-    color: 'white',
-    paddingLeft: 10,
-    flex: 1
-  },
-  emailNotFound: {
-    fontWeight: '600',
-    color: '#FF5E84',
-    fontSize: 16,
-    padding: 10,
-    paddingBottom: 0,
-    height: 50
-  }
-});
