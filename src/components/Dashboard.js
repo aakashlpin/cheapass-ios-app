@@ -117,10 +117,10 @@ export default class Dashboard extends React.Component {
           </View>
           <View style={styles.listItemContainerRightChild}>
             <View style={[styles.listItemProductNameContainer, this.state.productNameDynamicWidth]}>
-              <Text style={{}}>{track.productName}</Text>
+              <Text style={styles.productDetails}>{track.productName}</Text>
             </View>
             <View style={styles.listItemProductDetailsContainer}>
-              <Text style={styles.price}>₹{track.humanPrice}/-</Text>
+              <Text style={[styles.productDetails, styles.price]}>₹{track.humanPrice}/-</Text>
               <View style={[styles.sellerTag, track.isFavourable ? styles.favourableBuy : styles.unfavourableBuy]}>
                 <Icon name={track.isFavourable ? 'ion|arrow-down-c' : 'ion|arrow-up-c'} size={14} color="#fff" style={{height: 14, width: 8, marginRight: 2}} />
                 <Text style={styles.sellerName}>{track.seller}</Text>
@@ -194,11 +194,15 @@ var styles = StyleSheet.create({
     padding: 12,
     paddingLeft: 0,
     borderBottomWidth: 1,
-    borderBottomColor: '#ccc'
+    borderBottomColor: '#CECED2'
   },
   listItemProductNameContainer: {
     width: 150,
     paddingRight: 6
+  },
+  productDetails: {
+    // color: '#0E325A'
+    // fontWeight: '500'
   },
   iconCart: {
     height: 60,
