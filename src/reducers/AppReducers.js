@@ -191,7 +191,8 @@ function app (state = initialState, action) {
         ...state,
         login: {
           ...state.login,
-          isSubmittingOTP: true
+          isSubmittingOTP: true,
+          errors: {}
         }
       };
     }

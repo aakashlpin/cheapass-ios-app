@@ -5,6 +5,7 @@ import styles from '../styles/login.styles';
 var {
   ScrollView,
   View,
+  Image,
   Text,
   StatusBarIOS
 } = React;
@@ -17,7 +18,11 @@ class LoggedOutWrapper extends React.Component {
   render () {
     return (
       <View style={styles.mainContainer}>
-        <Text style={styles.title}>Cheapass</Text>
+        <Image
+          style={styles.logo}
+          source={require('image!logo')}
+        />
+        <Text style={styles.tagLine}>Simplest Price Drop Alerts via Push Notifications</Text>
         <ScrollView contentContainerStyle={{flex: 1}} contentOffset={this.props.contentOffset} keyboardShouldPersistTaps={true}>
           {this.props.children}
         </ScrollView>

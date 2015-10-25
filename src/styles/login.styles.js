@@ -6,12 +6,20 @@ const LoginStyles = StyleSheet.create({
     flexDirection: 'column',
     backgroundColor: '#0B315B'
   },
-  title: {
-    paddingTop: 48,
-    marginBottom: 20,
-    fontSize: 25,
+  logo: {
+    height: 47,
+    width: 188,
+    alignSelf: 'center',
+    marginTop: 48,
+    marginBottom: 10
+  },
+  tagLine: {
+    alignSelf: 'center',
     textAlign: 'center',
-    color: '#fff'
+    width: 250,
+    color: 'rgba(255, 255, 255, 0.65)',
+    fontSize: 16,
+    // fontWeight: '600'
   },
   formContainer: {
     position: 'absolute',
@@ -53,6 +61,9 @@ const LoginStyles = StyleSheet.create({
     padding: 10,
     paddingBottom: 0,
     height: 50
+  },
+  otpError: {
+    height: 30
   },
   actionsContainer: {
     flexDirection: 'row',

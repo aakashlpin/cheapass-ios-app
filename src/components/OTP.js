@@ -15,21 +15,24 @@ export default class Otp extends React.Component {
   constructor () {
     super();
     this.state = {
+      isFocussed: false,
       contentOffset: {x: 0, y: 0}
     };
   }
   onFocus () {
     const { height } = Dimensions.get('window');
     this.setState({
+      isFocussed: true,
       contentOffset: {
         x: 0,
-        y: (height * 1 / 3)
+        y: (height * 1 / 3) - 15
       }
     });
   }
 
   onBlur () {
     this.setState({
+      isFocussed: false,
       contentOffset: {x: 0, y: 0}
     });
   }
@@ -39,8 +42,16 @@ export default class Otp extends React.Component {
     return (
       <LoggedOutWrapper showLoader={isSubmittingOTP} contentOffset={this.state.contentOffset}>
         <View style={styles.formContainer}>
-          <Text style={styles.otpSentTo}>OTP sent to</Text>
-          <Text style={styles.otpSentToEmail}>{email}</Text>
+          {
+            !this.state.isFocussed
+            ? (
+              <View>
+                <Text style={styles.otpSentTo}>OTP sent to</Text>
+                <Text style={styles.otpSentToEmail}>{email}</Text>
+              </View>
+            )
+            : null
+          }
           <View style={styles.emailInputBar}>
             <View style={{padding: 10}}>
               <Icon
@@ -74,7 +85,7 @@ export default class Otp extends React.Component {
               />
             </TouchableHighlight>
           </View>
-          <Text style={styles.emailNotFound}>{errors.otp ? errors.otp : ''}</Text>
+          <Text style={[styles.emailNotFound, styles.otpError]}>{errors.otp ? errors.otp : ''}</Text>
           <View style={styles.actionsContainer}>
             <TouchableHighlight onPress={this.props.onResendOTP}>
               <Text style={styles.actionText}>Resend OTP</Text>
@@ -93,6 +104,7 @@ Otp.propTypes = {
   email: PropTypes.string.isRequired,
   otp: PropTypes.string.isRequired,
   isSubmittingOTP: PropTypes.bool.isRequired,
+  autoFocus: PropTypes.bool.isRequired,
   onChangeOTP: PropTypes.func.isRequired,
   onSubmitOTP: PropTypes.func.isRequired,
   onResendOTP: PropTypes.func.isRequired,
