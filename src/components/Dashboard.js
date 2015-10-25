@@ -113,7 +113,7 @@ export default class Dashboard extends React.Component {
         >
         <View style={styles.listItemContainer}>
           <View style={styles.listItemContainerLeftChild}>
-            <Image style={styles.listItemLeftImage} source={{uri: track.productImage}} />
+            <Image style={styles.listItemLeftImage} resizeMode="contain" source={{uri: track.productImage}} />
           </View>
           <View style={styles.listItemContainerRightChild}>
             <View style={[styles.listItemProductNameContainer, this.state.productNameDynamicWidth]}>
