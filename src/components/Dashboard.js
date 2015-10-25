@@ -160,7 +160,10 @@ var styles = StyleSheet.create({
     flexWrap: 'nowrap',
     alignItems: 'center',
     padding: 10,
-    backgroundColor: '#F1F3F5'
+    backgroundColor: '#F1F3F5',
+    shadowColor: '#000',
+    shadowOffset: {width: 1, height: 1},
+    shadowOpacity: 0.2
   },
   tracksHeaderText: {
     color: '#0E325A',
