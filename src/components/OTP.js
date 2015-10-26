@@ -40,7 +40,7 @@ export default class Otp extends React.Component {
   render () {
     const {email, otp, isSubmittingOTP, errors} = this.props;
     return (
-      <LoggedOutWrapper showLoader={isSubmittingOTP} contentOffset={this.state.contentOffset}>
+      <LoggedOutWrapper showLoader={isSubmittingOTP} scrollViewcontentOffset={this.state.contentOffset}>
         <View style={styles.formContainer}>
           {
             !this.state.isFocussed

@@ -22,8 +22,8 @@
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		142A142A1BCC1F3500F1FB78 /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 146834041AC3E56700842450 /* libReact.a */; };
-		142A14441BCC32AC00F1FB78 /* RCTRemotePushManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 142A14411BCC32AC00F1FB78 /* RCTRemotePushManager.m */; settings = {ASSET_TAGS = (); }; };
-		142A14451BCC32AC00F1FB78 /* RemotePushDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 142A14431BCC32AC00F1FB78 /* RemotePushDelegate.m */; settings = {ASSET_TAGS = (); }; };
+		142A14441BCC32AC00F1FB78 /* RCTRemotePushManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 142A14411BCC32AC00F1FB78 /* RCTRemotePushManager.m */; };
+		142A14451BCC32AC00F1FB78 /* RemotePushDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 142A14431BCC32AC00F1FB78 /* RemotePushDelegate.m */; };
 		14AAE3541BDA9D8F00A33C5F /* libReactNativeIcons.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 14AAE3531BDA9D0700A33C5F /* libReactNativeIcons.a */; };
 		14AAE35A1BDAA1AF00A33C5F /* ionicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 14AAE3591BDAA1AF00A33C5F /* ionicons.ttf */; };
 		14AAE3621BDBE13900A33C5F /* libRNOverlay.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 14AAE3611BDBE11C00A33C5F /* libRNOverlay.a */; };

@@ -23,7 +23,7 @@ class LoggedOutWrapper extends React.Component {
           source={require('image!logo')}
         />
         <Text style={styles.tagLine}>Simplest Price Drop Alerts via Push Notifications</Text>
-        <ScrollView contentContainerStyle={{flex: 1}} contentOffset={this.props.contentOffset} keyboardShouldPersistTaps={true}>
+        <ScrollView contentContainerStyle={{flex: 1}} contentOffset={this.props.scrollViewcontentOffset} keyboardShouldPersistTaps={true}>
           {this.props.children}
         </ScrollView>
         <LoadingOverlay isVisible={this.props.showLoader} />
@@ -34,7 +34,7 @@ class LoggedOutWrapper extends React.Component {
 
 LoggedOutWrapper.propTypes = {
   showLoader: PropTypes.bool.isRequired,
-  contentOffset: PropTypes.number.isRequired
+  scrollViewcontentOffset: PropTypes.object.isRequired
 };
 
 export default LoggedOutWrapper;

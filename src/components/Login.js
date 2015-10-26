@@ -37,7 +37,7 @@ export default class Login extends React.Component {
   render () {
     const {email, isSubmittingEmail, autoFocus = false, errors} = this.props;
     return (
-      <LoggedOutWrapper showLoader={isSubmittingEmail} contentOffset={this.state.contentOffset}>
+      <LoggedOutWrapper showLoader={isSubmittingEmail} scrollViewcontentOffset={this.state.contentOffset}>
         <View style={styles.formContainer}>
           <View style={styles.emailInputBar}>
             <View style={{padding: 10}}>
