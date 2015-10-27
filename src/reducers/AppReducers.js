@@ -85,7 +85,12 @@ function app (state = initialState, action) {
         ...state,
         isLoading: false,
         isLoggedIn: false,
-        isOTPSent: false
+        isOTPSent: false,
+        login: {
+          ...state.login,
+          email: '',
+          otp: ''
+        }
       };
     }
 
