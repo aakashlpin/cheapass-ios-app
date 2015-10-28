@@ -25,7 +25,7 @@ export default class Otp extends React.Component {
       isFocussed: true,
       contentOffset: {
         x: 0,
-        y: height <= 480 ? ((height / 4) - 20) : ((height / 3) - 15)
+        y: (height / 3) - 15
       }
     });
   }

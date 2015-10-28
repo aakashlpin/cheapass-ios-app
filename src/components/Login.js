@@ -23,7 +23,7 @@ export default class Login extends React.Component {
     this.setState({
       contentOffset: {
         x: 0,
-        y: height <= 480 ? (height * 1 / 4) : (height * 1 / 3)
+        y: height * 1 / 3
       }
     });
   }
