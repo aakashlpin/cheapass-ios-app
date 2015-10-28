@@ -99,6 +99,16 @@ export function handleInitialAppLoad () {
       .getItem(STORAGE_KEY_EMAIL)
       .then((email) => {
         navigateToDashboard({dispatch, email});
+      })
+      .catch(() => {
+        dispatch({
+          type: INIT_APP_WITH_LOGIN
+        });
+      });
+    })
+    .catch(() => {
+      dispatch({
+        type: INIT_APP_WITH_LOGIN
       });
     });
   };
