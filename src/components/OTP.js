@@ -104,7 +104,6 @@ Otp.propTypes = {
   email: PropTypes.string.isRequired,
   otp: PropTypes.string.isRequired,
   isSubmittingOTP: PropTypes.bool.isRequired,
-  autoFocus: PropTypes.bool.isRequired,
   onChangeOTP: PropTypes.func.isRequired,
   onSubmitOTP: PropTypes.func.isRequired,
   onResendOTP: PropTypes.func.isRequired,
